@@ -12,7 +12,7 @@
   "author": "KD",
   "license": "ISC",
   "dependencies": {
-    "chatgpt": "^2.0.4",
+    "chatgpt": "^2.3.1",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "axios": "^1.2.1",

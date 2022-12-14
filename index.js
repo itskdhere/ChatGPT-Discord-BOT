@@ -1,3 +1,11 @@
+/* -:Environment Variables:-
+ ENABLE_DIRECT_MESSAGES=false
+ DISCORD_CLIENT_ID
+ USER_AGENT
+ DISCORD_BOT_TOKEN
+ CLOUDFLARE_CLEARANCE_TOKEN
+ SESSION_TOKEN
+*/
 import dotenv from 'dotenv';
 import { ChatGPTAPI } from 'chatgpt';
 import axios from 'axios';
@@ -26,8 +34,10 @@ const commands = [
 
 async function initChatGPT() {
     const sessionToken = process.env.SESSION_TOKEN
+    const clearanceToken = process.env.CLOUDFLARE_CLEARANCE_TOKEN
+    const userAgent = process.env.USER_AGENT
 
-    let api = new ChatGPTAPI({ sessionToken })
+    let api = new ChatGPTAPI({ sessionToken , clearanceToken ,  userAgent})
 
     // await api.ensureAuth()
 
@@ -92,7 +102,7 @@ async function main() {
 
         let tmr = setTimeout(() => {
             cb("Oppss, something went wrong! (Timeout)")
-        }, 45000)
+        }, 100000)
 
         if (conversationInfo) {
             let conversation = chatGTP.getConversation({
