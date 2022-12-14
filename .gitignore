@@ -1,3 +1,10 @@
+# Misc.
+tmp/
+
+# Replit
+.replit
+replit.nix
+
 # Logs
 logs
 *.log

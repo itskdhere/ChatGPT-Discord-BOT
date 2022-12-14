@@ -1,0 +1,22 @@
+{
+  "name": "chatgpt-discord-bot",
+  "version": "1.0.0",
+  "description": "ChatGPT Discord BOT",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "KD",
+  "license": "ISC",
+  "dependencies": {
+    "chatgpt": "^2.0.4",
+    "discord.js": "^14.7.1",
+    "dotenv": "^16.0.3",
+    "axios": "^1.2.1",
+    "@types/node": "^18.0.6",
+    "node-fetch": "^3.2.6"
+  }
+}
