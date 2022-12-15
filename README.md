@@ -1,7 +1,7 @@
 # ChatGPT Discord BOT
 A Discord BOT Powered By OpenAI's [ChatGPT](https://chat.openai.com) ✨
 
-### ⚡ [Join My Discord Server To Test The Bot](https://discord.gg/vp7M9byhcv)
+### ⚡ [Join My Discord Server To Test The Bot ⚡](https://discord.gg/vp7M9byhcv)
 
 
 ## ✨Features 
