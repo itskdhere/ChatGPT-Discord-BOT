@@ -16,7 +16,7 @@ A Discord BOT Powered By OpenAI's [ChatGPT](https://chat.openai.com) ✨
 ### Requirements:
  - [Node.js v18](https://nodejs.org/)
  - [OpenAI Account](https://chat.openai.com/)
-- Atleast 1vCPU , 1GB RAM and 500MB Storage.
+- Atleast 1vCPU , 1GB RAM and 1GB Storage.
 
 ### Steps:
 0. Create **New Application** [BOT] from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with proper *Bot Permissions* and *Privileged Gateway Intents*.
