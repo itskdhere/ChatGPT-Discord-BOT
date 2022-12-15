@@ -199,8 +199,8 @@ async function main() {
 main()
 
 // Auto-Run 24/7 & Debug -----------------------------------
-http.createServer((req, res) => res.end('BOT is Up & Running..!!')).listen(80);
-
+// http.createServer((req, res) => res.end('BOT is Up & Running..!!')).listen(80);
+/*
 setInterval(() => {
     axios
         .get('https://discord.com/api/v10')
@@ -221,3 +221,4 @@ setInterval(() => {
         });
 
 }, 10000);
+*/
