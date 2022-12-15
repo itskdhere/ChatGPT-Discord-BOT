@@ -1,7 +1,7 @@
 # ChatGPT Discord BOT
 A Discord BOT Powered By OpenAI's [ChatGPT](https://chat.openai.com) ✨
 
-### ⚡ [Join My Discord Server To Test The Bot ✨](https://discord.gg/vp7M9byhcv)
+### ⚡ [Join My Discord Server To Test The Bot](https://discord.gg/vp7M9byhcv)
 
 
 ## ✨Features 
@@ -16,8 +16,9 @@ A Discord BOT Powered By OpenAI's [ChatGPT](https://chat.openai.com) ✨
 ### Requirements:
  - [Node.js v18](https://nodejs.org/)
  - [OpenAI Account](https://chat.openai.com/)
+- Atleast 1vCPU , 1GB RAM and 500MB Storage.
 
-
+### Steps:
 0. Create **New Application** [BOT] from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with proper *Bot Permissions* and *Privileged Gateway Intents*.
 
 1. `Star⭐` this Repo to get updates. 
@@ -42,6 +43,8 @@ npm run start
 
 7. Use the BOT 🎉
 
+
 ## ⛓Others
-### 📝Licensing: [MIT](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/LICENSE)
-<!-- 💡-->
+##### 📝License: [MIT](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/LICENSE)
+##### 🔋  ChatGPT API: [transitive-bullshit/chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api)
+##### 💡 Inspiration:  [onury5506/Discord-ChatGPT-Bot](https://github.com/onury5506/Discord-ChatGPT-Bot)
