@@ -7,7 +7,7 @@
  SESSION_TOKEN
 */
 import dotenv from 'dotenv';
-import { ChatGPTAPI } from 'chatgpt';
+import { ChatGPTAPI , getOpenAIAuth } from 'chatgpt';
 import axios from 'axios';
 import { Client, Collection, GatewayIntentBits, REST, Routes, Partials, ChannelType, ActivityType } from 'discord.js';
 import http from 'http';
@@ -36,10 +36,15 @@ async function initChatGPT() {
     const sessionToken = process.env.SESSION_TOKEN
     const clearanceToken = process.env.CLOUDFLARE_CLEARANCE_TOKEN
     const userAgent = process.env.USER_AGENT
-
-    let api = new ChatGPTAPI({ sessionToken , clearanceToken ,  userAgent})
-
-    // await api.ensureAuth()
+	
+	const openAIAuth = await getOpenAIAuth({
+    email: process.env.OPENAI_EMAIL,
+    password: process.env.OPENAI_PASSWORD
+  })
+	
+    //let api = new ChatGPTAPI({ sessionToken , clearanceToken ,  userAgent})
+	const api = new ChatGPTAPI({ ...openAIAuth })
+    await api.ensureAuth()
 
     return {
         sendMessage: (message, opts = {}) => {
@@ -69,7 +74,7 @@ async function main() {
         process.exit()
     })
 
-    await initDiscordCommands()
+    await initDiscordCommands().catch(e => { console.log(e) })
 
     const client = new Client({
         intents: [
@@ -102,7 +107,7 @@ async function main() {
 
         let tmr = setTimeout(() => {
             cb("Oppss, something went wrong! (Timeout)")
-        }, 100000)
+        }, 45000)
 
         if (conversationInfo) {
             let conversation = chatGTP.getConversation({
@@ -145,7 +150,7 @@ async function main() {
         console.log("----Direct Message---")
         console.log("Date    : " + new Date())
         console.log("UserId  : " + user.id)
-        console.log("User    : " + user.username)
+        console.log("User    : " + user.tag)
         console.log("Message : " + message.content)
         console.log("--------------")
 
