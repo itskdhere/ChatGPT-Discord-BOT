@@ -7,7 +7,7 @@
  SESSION_TOKEN
 */
 import dotenv from 'dotenv';
-import { ChatGPTAPI , getOpenAIAuth } from 'chatgpt';
+import { ChatGPTAPI, getOpenAIAuth, ChatGPTAPIBrowser } from 'chatgpt';
 import axios from 'axios';
 import { Client, Collection, GatewayIntentBits, REST, Routes, Partials, ChannelType, ActivityType } from 'discord.js';
 import http from 'http';
@@ -36,15 +36,21 @@ async function initChatGPT() {
     const sessionToken = process.env.SESSION_TOKEN
     const clearanceToken = process.env.CLOUDFLARE_CLEARANCE_TOKEN
     const userAgent = process.env.USER_AGENT
-	
-	const openAIAuth = await getOpenAIAuth({
-    email: process.env.OPENAI_EMAIL,
-    password: process.env.OPENAI_PASSWORD
-  })
-	
-    //let api = new ChatGPTAPI({ sessionToken , clearanceToken ,  userAgent})
-	const api = new ChatGPTAPI({ ...openAIAuth })
-    await api.ensureAuth()
+
+    // const openAIAuth = await getOpenAIAuth({
+    //     email: process.env.OPENAI_EMAIL,
+    //     password: process.env.OPENAI_PASSWORD
+    // })
+    // let api = new ChatGPTAPI({ sessionToken, clearanceToken, userAgent })
+    // const api = new ChatGPTAPI({ ...openAIAuth })
+    // await api.ensureAuth()
+
+    const api = new ChatGPTAPIBrowser({
+        email: process.env.OPENAI_EMAIL,
+        password: process.env.OPENAI_PASSWORD
+    })
+
+    await api.initSession()
 
     return {
         sendMessage: (message, opts = {}) => {
