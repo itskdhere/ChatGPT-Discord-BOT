@@ -1,11 +1,3 @@
-/* -:Environment Variables:-
- ENABLE_DIRECT_MESSAGES=false
- DISCORD_CLIENT_ID
- USER_AGENT
- DISCORD_BOT_TOKEN
- CLOUDFLARE_CLEARANCE_TOKEN
- SESSION_TOKEN
-*/
 import dotenv from 'dotenv';
 import { ChatGPTAPI, getOpenAIAuth, ChatGPTAPIBrowser } from 'chatgpt';
 import axios from 'axios';
@@ -111,8 +103,9 @@ async function main() {
 
         const { conversationInfo } = opts
 
-        let tmr = setTimeout(() => {
+        let tmr = setTimeout((e) => {
             cb("Oppss, something went wrong! (Timeout)")
+            console.error(e)
         }, 45000)
 
         if (conversationInfo) {
@@ -126,15 +119,17 @@ async function main() {
                 conversationInfo.parentMessageId = conversation.parentMessageId
                 clearTimeout(tmr)
                 cb(response)
-            }).catch(() => {
+            }).catch((e) => {
                 cb("Oppss, something went wrong! (Error)")
+                console.error(e)
             })
         } else {
             chatGTP.sendMessage(question).then((response) => {
                 clearTimeout(tmr)
                 cb(response)
-            }).catch(() => {
+            }).catch((e) => {
                 cb("Oppss, something went wrong! (Error)")
+                console.error(e)
             })
         }
     }
@@ -170,6 +165,8 @@ async function main() {
         try {
             let sentMessage = await user.send("Hmm, let me think...")
             askQuestion(message.content, async (response) => {
+                console.log('Response: ')
+                console.log(response)
                 if (response.length >= MAX_RESPONSE_CHUNK_LENGTH) {
                     splitAndSendResponse(response, user)
                 } else {
@@ -183,14 +180,17 @@ async function main() {
 
     client.on("interactionCreate", async interaction => {
         const question = interaction.options.getString("question")
+        console.log('Question: ' + question)
         try {
             await interaction.reply({ content: "let me think..." })
             askQuestion(question, async (content) => {
+                console.log('Response: ')
+                console.log(content)
                 if (content.length >= MAX_RESPONSE_CHUNK_LENGTH) {
                     await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." })
-                    splitAndSendResponse(content, interaction.user)
+                    splitAndSendResponse(content.response, interaction.user)
                 } else {
-                    await interaction.editReply({ content })
+                    await interaction.editReply( content.response )
                 }
             })
         } catch (e) {
