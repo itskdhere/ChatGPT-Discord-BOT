@@ -25,10 +25,10 @@ const commands = [
 ];
 
 async function initChatGPT() {
-    const sessionToken = process.env.SESSION_TOKEN
-    const clearanceToken = process.env.CLOUDFLARE_CLEARANCE_TOKEN
-    const userAgent = process.env.USER_AGENT
-
+    /* If you aren't using puppeteer, Un-comment the following & comment-out the block "This uses puppeteer" below*/
+    // const sessionToken = process.env.SESSION_TOKEN
+    // const clearanceToken = process.env.CLOUDFLARE_CLEARANCE_TOKEN
+    // const userAgent = process.env.USER_AGENT
     // const openAIAuth = await getOpenAIAuth({
     //     email: process.env.OPENAI_EMAIL,
     //     password: process.env.OPENAI_PASSWORD
@@ -37,12 +37,15 @@ async function initChatGPT() {
     // const api = new ChatGPTAPI({ ...openAIAuth })
     // await api.ensureAuth()
 
+
+    /* This uses puppeteer */
     const api = new ChatGPTAPIBrowser({
         email: process.env.OPENAI_EMAIL,
         password: process.env.OPENAI_PASSWORD
     })
-
     await api.initSession()
+    /* _ */
+
 
     return {
         sendMessage: (message, opts = {}) => {
