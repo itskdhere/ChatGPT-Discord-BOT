@@ -1,6 +1,6 @@
 # ChatGPT Discord BOT
-
 [![CodeQL](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml)
+
 
 A Discord BOT Powered By OpenAI's [ChatGPT](https://chat.openai.com) ✨
 
@@ -10,10 +10,11 @@ A Discord BOT Powered By OpenAI's [ChatGPT](https://chat.openai.com) ✨
 ## ✨Features 
  🔥 Use slash command `/ask` to ask questions in any channel.
  
- 🔑 Directly DM the bot to get answer/response privately, Send `reset` to start a new thread.
+ 💥 This uses `puppeteer` to automate the login process. Auto Solve CAPTCHA ✨
  
- 💥  This uses `puppeteer` to automate the login process. Auto Solve CAPTCHA ✨
-
+ 🔑 Uses Single ChatGPT Conversation Thread per Session.
+ 
+<!--🔑 Directly DM the bot to get answer/response privately, Send `reset` to start a new thread.(Disabled)-->
 
  ## 📡 Quick Start [Self-Hosting] 
 ### Requirements:

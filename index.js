@@ -33,11 +33,10 @@ async function initOpenAI() {
     const api = new ChatGPTAPIBrowser({
         email: process.env.OPENAI_EMAIL,
         password: process.env.OPENAI_PASSWORD
+      //isGoogleLogin: true
     })
 
     await api.initSession();
-
-    // res = await api.sendMessage('Hi'); // Init New Thread
 
     return api;
 }
@@ -84,11 +83,11 @@ async function main() {
         client.user.setActivity('/ask');
     });
 
-    // WIP: DM Handler
-    
     // Channel Message Handler
     client.on("interactionCreate", async interaction => {
         if (!interaction.isChatInputCommand()) return;
+
+        client.user.setActivity(interaction.user.tag, { type: ActivityType.Watching });
 
         switch (interaction.commandName) {
             case "ask":
@@ -110,7 +109,7 @@ async function main() {
     async function ask_Interaction_Handler(interaction) {
         const question = interaction.options.getString("question");
 
-        console.log("----Channel Message----------");
+        console.log("----------Channel Message--------");
         console.log("Date & Time : " + new Date());
         console.log("UserId      : " + interaction.user.id);
         console.log("User        : " + interaction.user.tag);
@@ -120,7 +119,7 @@ async function main() {
             await interaction.reply({ content: "ChatGPT Is Processing Your Question..." });
             askQuestion(question, async (content) => {
                 console.log("Response : " + content.response);
-                console.log("-----------------------------");
+                console.log("---------------End---------------");
                 if (content.length >= MAX_RESPONSE_LENGTH) {
                     await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." });
                     splitAndSendResponse(content.response, interaction.user);
@@ -132,6 +131,8 @@ async function main() {
         } catch (e) {
             console.error(e);
         }
+
+        client.user.setActivity('/ask');
     }
 
     function askQuestion(question, cb) {
