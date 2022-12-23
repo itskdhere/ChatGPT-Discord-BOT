@@ -1,14 +1,14 @@
-import dotenv from 'dotenv';
-import { ChatGPTAPI, getOpenAIAuth, ChatGPTAPIBrowser } from 'chatgpt';
+// Imports
+import dotenv from 'dotenv'; dotenv.config();
+import { ChatGPTAPIBrowser } from 'chatgpt';
+import { Client, Collection, ChannelType, GatewayIntentBits, REST, Routes, Partials, ActivityType } from 'discord.js';
 import axios from 'axios';
-import { Client, Collection, GatewayIntentBits, REST, Routes, Partials, ChannelType, ActivityType } from 'discord.js';
-import http from 'http';
-import { exec } from 'child_process';
-import Conversations from './conversations.js';
 
-const MAX_RESPONSE_CHUNK_LENGTH = 1500
-dotenv.config()
+// Defines
+const MAX_RESPONSE_LENGTH = 2000 // Discord Max 2000 Characters
+let res; // ChatGPT Thread Identifier
 
+// Discord Slash Commands Defines
 const commands = [
     {
         name: 'ask',
@@ -28,24 +28,23 @@ const commands = [
     }
 ];
 
-async function initChatGPT() {
+// Initialize OpenAI Session & New ChatGPT Thread
+async function initOpenAI() {
     const api = new ChatGPTAPIBrowser({
         email: process.env.OPENAI_EMAIL,
         password: process.env.OPENAI_PASSWORD
     })
 
-    await api.initSession()
+    await api.initSession();
 
-    return {
-        sendMessage: (message, opts = {}) => {
-            return api.sendMessage(message, opts)
-        }
-    };
+    // res = await api.sendMessage('Hi'); // Init New Thread
+
+    return api;
 }
 
-async function initDiscordCommands() {
+// Initialize Discord Application Commands
+async function initDiscordCommands(api) {
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
-
     try {
         console.log('Started refreshing application (/) commands.');
         await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID), { body: commands });
@@ -53,15 +52,17 @@ async function initDiscordCommands() {
     } catch (error) {
         console.error(error);
     }
+    res = await api.sendMessage('Hi'); // Init New Thread
 }
 
+// Main Function (Execution Starts Here)
 async function main() {
-    const chatGTP = await initChatGPT().catch(e => {
-        console.error(e)
+    const chatGTP = await initOpenAI().catch(error => {
+        console.error(error)
         process.exit()
     })
 
-    await initDiscordCommands().catch(e => { console.log(e) })
+    await initDiscordCommands(chatGTP).catch(e => { console.log(e) });
 
     const client = new Client({
         intents: [
@@ -83,156 +84,100 @@ async function main() {
         client.user.setActivity('/ask');
     });
 
+    // WIP: DM Handler
+    
+    // Channel Message Handler
+    client.on("interactionCreate", async interaction => {
+        if (!interaction.isChatInputCommand()) return;
 
-    function askQuestion(question, cb, opts = {}) {
-
-        const { conversationInfo } = opts
-
-        let tmr = setTimeout((e) => {
-            cb("Oppss, something went wrong! (Timeout)")
-            console.error(e)
-        }, 100000)
-
-        if (conversationInfo) {
-            let conversation = chatGTP.getConversation({
-                conversationId: conversationInfo.conversationId,
-                parentMessageId: conversationInfo.parentMessageId
-            })
-
-            conversation.sendMessage(question).then(response => {
-                conversationInfo.conversationId = conversation.conversationId
-                conversationInfo.parentMessageId = conversation.parentMessageId
-                clearTimeout(tmr)
-                cb(response)
-            }).catch((e) => {
-                cb("Oppss, something went wrong! (Error)")
-                console.error(e)
-            })
-        } else {
-            chatGTP.sendMessage(question).then((response) => {
-                clearTimeout(tmr)
-                cb(response)
-            }).catch((e) => {
-                cb("Oppss, something went wrong! (Error)")
-                console.error(e)
-            })
+        switch (interaction.commandName) {
+            case "ask":
+                ask_Interaction_Handler(interaction)
+                break;
+            case "ping":
+                ping_Interaction_Handler(interaction)
+                break;
+            default:
+                await interaction.reply({ content: 'Command Not Found' });
         }
+    });
+
+    async function ping_Interaction_Handler(interaction) {
+        const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+        interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
     }
 
-    async function splitAndSendResponse(resp, user) {
-        while (resp.length > 0) {
-            let end = Math.min(MAX_RESPONSE_CHUNK_LENGTH, resp.length)
-            await user.send(resp.slice(0, end))
-            resp = resp.slice(end, resp.length)
-        }
-    }
-
-    async function handle_interaction_ask(interaction) {
+    async function ask_Interaction_Handler(interaction) {
         const question = interaction.options.getString("question");
 
         console.log("----Channel Message----------");
-        console.log("Date & Time: " + new Date());
-        console.log("UserId     : " + interaction.user.id);
-        console.log("User       : " + interaction.user.tag);
-        console.log("Message    : " + question);
-        
+        console.log("Date & Time : " + new Date());
+        console.log("UserId      : " + interaction.user.id);
+        console.log("User        : " + interaction.user.tag);
+        console.log("Question    : " + question);
+        // TODO: send to DB
         try {
             await interaction.reply({ content: "ChatGPT Is Processing Your Question..." });
             askQuestion(question, async (content) => {
-                console.log("Response: " + content.response);
+                console.log("Response : " + content.response);
                 console.log("-----------------------------");
-                if (content.length >= MAX_RESPONSE_CHUNK_LENGTH) {
+                if (content.length >= MAX_RESPONSE_LENGTH) {
                     await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." });
                     splitAndSendResponse(content.response, interaction.user);
                 } else {
                     await interaction.editReply(content.response);
                 }
+                // TODO: send to DB
             })
         } catch (e) {
             console.error(e);
         }
     }
 
-    async function handle_interaction_ping(interaction) {
-        const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
-        interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
+    function askQuestion(question, cb) {
+        let tmr = setTimeout((e) => {
+            cb("Oppss, something went wrong! (Timeout)")
+            console.error(e)
+        }, 100000)
+
+        chatGTP.sendMessage(question, {
+            conversationId: res.conversationId,
+            parentMessageId: res.messageId
+        }).then((response) => {
+            clearTimeout(tmr)
+            res = response;
+            cb(response)
+        }).catch((err) => {
+            cb("Oppss, something went wrong! (Error)")
+            console.error("AskQuestion Error" + err)
+        })
     }
 
-    client.on("interactionCreate", async interaction => {
-        if (!interaction.isChatInputCommand()) return;
-        switch (interaction.commandName) {
-            case "ask":
-                handle_interaction_ask(interaction)
-                break;
-            case "ping":
-                handle_interaction_ping(interaction)
-                break;
+    async function splitAndSendResponse(resp, user) {
+        while (resp.length > 0) {
+            let end = Math.min(MAX_RESPONSE_LENGTH, resp.length)
+            await user.send(resp.slice(0, end))
+            resp = resp.slice(end, resp.length)
         }
-    });
-
-    client.on("messageCreate", async message => {
-        if (process.env.ENABLE_DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
-            return;
-        }
-        const user = message.author
-
-        console.log("----Direct Message---")
-        console.log("Date    : " + new Date())
-        console.log("UserId  : " + user.id)
-        console.log("User    : " + user.tag)
-        console.log("Message : " + message.content)
-        console.log("--------------")
-
-        if (message.content == "reset") {
-            Conversations.resetConversation(user.id)
-            user.send("Who are you ?")
-            return;
-        }
-
-        let conversationInfo = Conversations.getConversation(user.id)
-        try {
-            let sentMessage = await user.send("Hmm, let me think...")
-            askQuestion(message.content, async (response) => {
-                console.log('Response: ')
-                console.log(response)
-                if (response.length >= MAX_RESPONSE_CHUNK_LENGTH) {
-                    splitAndSendResponse(response, user)
-                } else {
-                    await sentMessage.edit(response)
-                }
-            }, { conversationInfo })
-        } catch (e) {
-            console.error(e)
-        }
-    })
+    }
 
     client.login(process.env.DISCORD_BOT_TOKEN).catch(console.log);
 }
 
-main()
+main() // Call Main function
 
-// Auto-Run 24/7 & Debug (For Replit && Linux only) -----------------------------------
-
-// http.createServer((req, res) => res.end('BOT is Up & Running..!!')).listen(80);
-/*
+// Discord Rate Limit Check
 setInterval(() => {
     axios
         .get('https://discord.com/api/v10')
         .catch(error => {
-            if (error.response.status == 429) {
-                exec('kill 1', (error, stdout, stderr) => {
-                    if (error) {
-                        console.log(`error: ${error.message}`);
-                        return;
-                    }
-                    if (stderr) {
-                        console.log(`stderr: ${stderr}`);
-                        return;
-                    }
-                    console.log(`stdout: ${stdout}`);
-                });
+            if (error.response.status == 429) 
+            {
+                console.log("Discord Rate Limited");
+                console.warn("Status: " + error.response.status)
+                console.warn(error)
+                // TODO: Take Action (e.g. Change IP Address)
             }
         });
 
-}, 10000);
-*/
+}, 100000);
