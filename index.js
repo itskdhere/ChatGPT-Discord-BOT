@@ -22,37 +22,23 @@ const commands = [
             }
         ]
     },
+    {
+        name: 'ping',
+        description: 'Check Websocket Heartbeat & Roundtrip Latency'
+    }
 ];
 
 async function initChatGPT() {
-    /* If you aren't using puppeteer, Un-comment the following & comment-out the block "This uses puppeteer" below*/
-    // const sessionToken = process.env.SESSION_TOKEN
-    // const clearanceToken = process.env.CLOUDFLARE_CLEARANCE_TOKEN
-    // const userAgent = process.env.USER_AGENT
-    // const openAIAuth = await getOpenAIAuth({
-    //     email: process.env.OPENAI_EMAIL,
-    //     password: process.env.OPENAI_PASSWORD
-    // })
-    // let api = new ChatGPTAPI({ sessionToken, clearanceToken, userAgent })
-    // const api = new ChatGPTAPI({ ...openAIAuth })
-    // await api.ensureAuth()
-
-
-    /* This uses puppeteer */
     const api = new ChatGPTAPIBrowser({
         email: process.env.OPENAI_EMAIL,
         password: process.env.OPENAI_PASSWORD
     })
-    await api.initSession()
-    /* _ */
 
+    await api.initSession()
 
     return {
         sendMessage: (message, opts = {}) => {
             return api.sendMessage(message, opts)
-        },
-        getConversation(opts = {}) {
-            return api.getConversation(opts)
         }
     };
 }
@@ -89,15 +75,11 @@ async function main() {
         partials: [Partials.Channel]
     });
 
-    client.on('ready', () => {
+    client.once('ready', () => {
         console.log(`Logged in as ${client.user.tag}!`);
         console.log('Connected to Discord Gateway');
         console.log(new Date())
-    });
-
-    client.once('ready', () => {
         client.user.setStatus('online');
-        //client.user.setActivity('ChatGPT', { type: ActivityType.Watching });
         client.user.setActivity('/ask');
     });
 
@@ -109,7 +91,7 @@ async function main() {
         let tmr = setTimeout((e) => {
             cb("Oppss, something went wrong! (Timeout)")
             console.error(e)
-        }, 45000)
+        }, 100000)
 
         if (conversationInfo) {
             let conversation = chatGTP.getConversation({
@@ -144,6 +126,49 @@ async function main() {
             resp = resp.slice(end, resp.length)
         }
     }
+
+    async function handle_interaction_ask(interaction) {
+        const question = interaction.options.getString("question");
+
+        console.log("----Channel Message----------");
+        console.log("Date & Time: " + new Date());
+        console.log("UserId     : " + interaction.user.id);
+        console.log("User       : " + interaction.user.tag);
+        console.log("Message    : " + question);
+        
+        try {
+            await interaction.reply({ content: "ChatGPT Is Processing Your Question..." });
+            askQuestion(question, async (content) => {
+                console.log("Response: " + content.response);
+                console.log("-----------------------------");
+                if (content.length >= MAX_RESPONSE_CHUNK_LENGTH) {
+                    await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." });
+                    splitAndSendResponse(content.response, interaction.user);
+                } else {
+                    await interaction.editReply(content.response);
+                }
+            })
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    async function handle_interaction_ping(interaction) {
+        const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+        interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
+    }
+
+    client.on("interactionCreate", async interaction => {
+        if (!interaction.isChatInputCommand()) return;
+        switch (interaction.commandName) {
+            case "ask":
+                handle_interaction_ask(interaction)
+                break;
+            case "ping":
+                handle_interaction_ping(interaction)
+                break;
+        }
+    });
 
     client.on("messageCreate", async message => {
         if (process.env.ENABLE_DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
@@ -181,33 +206,13 @@ async function main() {
         }
     })
 
-    client.on("interactionCreate", async interaction => {
-        const question = interaction.options.getString("question")
-        console.log('Question: ' + question)
-        try {
-            await interaction.reply({ content: "let me think..." })
-            askQuestion(question, async (content) => {
-                console.log('Response: ')
-                console.log(content)
-                if (content.length >= MAX_RESPONSE_CHUNK_LENGTH) {
-                    await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." })
-                    splitAndSendResponse(content.response, interaction.user)
-                } else {
-                    await interaction.editReply( content.response )
-                }
-            })
-        } catch (e) {
-            console.error(e)
-        }
-
-    });
-
     client.login(process.env.DISCORD_BOT_TOKEN).catch(console.log);
 }
 
 main()
 
-// Auto-Run 24/7 & Debug -----------------------------------
+// Auto-Run 24/7 & Debug (For Replit && Linux only) -----------------------------------
+
 // http.createServer((req, res) => res.end('BOT is Up & Running..!!')).listen(80);
 /*
 setInterval(() => {
