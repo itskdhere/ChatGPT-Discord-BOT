@@ -1,7 +1,7 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
 import { ChatGPTAPIBrowser } from 'chatgpt';
-import { Client, Collection, ChannelType, GatewayIntentBits, REST, Routes, Partials, ActivityType } from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType, Collection, ChannelType } from 'discord.js';
 import axios from 'axios';
 
 // Defines
