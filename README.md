@@ -2,9 +2,6 @@
 [![CodeQL](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml)
 [![OSSAR](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml)
 [![Dependency Review](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml)
-<a href="https://discord.gg/vp7M9byhcv"><img alt="Discord" src="https://img.shields.io/discord/917792741054894131?color=%235865F2&label=Discord&logo=discord&logoColor=%23FFFFFF"></a>
-
-### [***⚡ Join My Discord Server To Use/Test The Bot ⚡***](https://discord.gg/vp7M9byhcv)
 
 A Discord BOT Powered By [OpenAI](https://openai.com/)'s [ChatGPT](https://chat.openai.com)
 
