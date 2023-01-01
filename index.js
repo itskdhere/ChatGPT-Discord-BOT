@@ -24,7 +24,7 @@ const commands = [
     },
     {
         name: 'ping',
-        description: 'Check Websocket Heartbeat & Roundtrip Latency'
+        description: 'Check Websocket Heartbeat && Roundtrip Latency'
     }
 ];
 
