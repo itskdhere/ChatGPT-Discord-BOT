@@ -30,15 +30,27 @@ const commands = [
 
 // Initialize OpenAI Session & New ChatGPT Thread
 async function initOpenAI() {
-    const api = new ChatGPTAPIBrowser({
-        email: process.env.OPENAI_EMAIL,
-        password: process.env.OPENAI_PASSWORD
-      //isGoogleLogin: true
-    })
-
-    await api.initSession();
-
-    return api;
+    const loginType = process.env.LOGIN_TYPE;
+    if (loginType === 'openai') {
+        const api = new ChatGPTAPIBrowser({
+            email: process.env.EMAIL,
+            password: process.env.PASSWORD
+        });
+        await api.initSession();
+        return api;
+    }
+    else if (loginType === 'google') {
+        const api = new ChatGPTAPIBrowser({
+            email: process.env.EMAIL,
+            password: process.env.PASSWORD,
+            isGoogleLogin: true
+        });
+        await api.initSession();
+        return api;
+    }
+    else {
+        console.log('Not a valid loginType; use "google" or "openai" ');
+    }
 }
 
 // Initialize Discord Application Commands
@@ -104,6 +116,7 @@ async function main() {
     async function ping_Interaction_Handler(interaction) {
         const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
         interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
+        client.user.setActivity('/ask');
     }
 
     async function ask_Interaction_Handler(interaction) {
@@ -126,13 +139,12 @@ async function main() {
                 } else {
                     await interaction.editReply(content.response);
                 }
+                client.user.setActivity('/ask');
                 // TODO: send to DB
             })
         } catch (e) {
             console.error(e);
         }
-
-        client.user.setActivity('/ask');
     }
 
     function askQuestion(question, cb) {
@@ -172,8 +184,7 @@ setInterval(() => {
     axios
         .get('https://discord.com/api/v10')
         .catch(error => {
-            if (error.response.status == 429) 
-            {
+            if (error.response.status == 429) {
                 console.log("Discord Rate Limited");
                 console.warn("Status: " + error.response.status)
                 console.warn(error)
