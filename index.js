@@ -1,7 +1,7 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
 import { ChatGPTAPIBrowser } from 'chatgpt';
-import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType, Collection, ChannelType } from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType} from 'discord.js';
 import axios from 'axios';
 
 // Defines
@@ -49,7 +49,7 @@ async function initOpenAI() {
         return api;
     }
     else {
-        console.log('Not a valid loginType; use "google" or "openai" ');
+        console.log('Not a valid loginType; use "google" or "openai" in .env file');
     }
 }
 
@@ -192,4 +192,4 @@ setInterval(() => {
             }
         });
 
-}, 100000);
+}, 60000); // Every 1 Minute

@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "ChatGPT Discord BOT",
   "main": "index.js",
   "type": "module",

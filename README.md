@@ -43,7 +43,7 @@ npm install
 ```bash
 npm run start
 ```
-6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api#captchas)
+6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api#captchas). If you're using Google Login then you can skip step 6.
 
 7. Use the BOT 🎉
 
@@ -52,3 +52,8 @@ npm run start
 ##### 📝 License: [MIT](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/LICENSE)
 ##### 🔋 ChatGPT API: [transitive-bullshit/chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api)
 ##### 💡 Initial Inspiration:  [onury5506/Discord-ChatGPT-Bot](https://github.com/onury5506/Discord-ChatGPT-Bot)
+
+<br>
+<p align='center'>
+--- 🙂 ---
+</p>
