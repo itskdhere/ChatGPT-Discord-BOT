@@ -27,7 +27,7 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
 
 1. `Star⭐` this Repo to get updates. 
 
-2. [Download](https://github.com/itskdhere/ChatGPT-Discord-BOT/archive/refs/heads/main.zip) or, Clone this Repo:
+2. [Download](https://github.com/itskdhere/ChatGPT-Discord-BOT/archive/refs/tags/v2.2.0.zip) or, Clone this Repo:
 ```bash
 git clone https://github.com/itskdhere/ChatGPT-Discord-BOT.git
 ```
