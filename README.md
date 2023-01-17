@@ -30,7 +30,7 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
 
 2. Clone this Repo:
 ```bash
-git clone https://github.com/itskdhere/ChatGPT-Discord-BOT.git
+git clone https://github.com/itskdhere/ChatGPT-Discord-BOT
 ```
 Then navigate to the Folder:
 ```bash
