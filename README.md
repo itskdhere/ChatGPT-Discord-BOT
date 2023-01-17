@@ -1,7 +1,7 @@
 # ChatGPT Discord BOT
 [![CodeQL](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml)
 [![OSSAR](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml)
-[![Dependency Review](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml)
+<!-- [![Dependency Review](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml) -->
 
 A Discord BOT Powered By [OpenAI](https://openai.com/)'s [ChatGPT](https://chat.openai.com)
 
@@ -18,6 +18,7 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
 
  ## 📡 Quick Start [Self-Hosting] 
 ### Requirements:
+ - [Git](https://git-scm.com/)
  - [Node.js v18](https://nodejs.org/)
  - [OpenAI Account](https://chat.openai.com/)
  - Atleast 1vCPU , 1GB RAM and 1GB Storage (For the **BOT Only**)
@@ -27,12 +28,16 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
 
 1. `Star⭐` this Repo to get updates. 
 
-2. [Download](https://github.com/itskdhere/ChatGPT-Discord-BOT/archive/refs/tags/v2.2.0.zip) or, Clone this Repo:
+2. Clone this Repo:
 ```bash
 git clone https://github.com/itskdhere/ChatGPT-Discord-BOT.git
 ```
+Then navigate to the Folder:
+```bash
+cd ChatGPT-Discord-BOT
+```
 
-3.  Install all dependencies: 
+3. Install all dependencies: 
 ```bash
 npm install
 ```
@@ -43,7 +48,7 @@ npm install
 ```bash
 npm run start
 ```
-6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api#captchas). If you're using Google Login then you can skip step 6.
+6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api#captchas). If you're using Google Login then you can skip this step.
 
 7. Use the BOT 🎉
 
