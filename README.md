@@ -1,7 +1,25 @@
-# ChatGPT Discord BOT
+
+<h1 align="center">
+ChatGPT Discord BOT
+</h1>
+
+<p align="center">
+<a href="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml" title="CodeQL">
+<img alt="CodeQL" src="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml/badge.svg?branch=main">
+</a>
+<a href="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml" title="OSSAR">
+<img alt="OSSAR" src="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml/badge.svg?branch=main">
+</a>
+</p><br>
+<p align="center">
+<a href="https://redirect.itskdhere.workers.dev/server/support/invite" title="Join Support Server"><img alt="Discord" src="https://img.shields.io/discord/917792741054894131?color=%235865F2&label=Join Support Server&logo=discord&logoColor=%23FFFFFF&style=for-the-badge"></a>
+</p>
+
+<!--
 [![CodeQL](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml)
 [![OSSAR](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml)
-<!-- [![Dependency Review](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml) -->
+[![Dependency Review](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml) 
+-->
 
 A Discord BOT Powered By [OpenAI](https://openai.com/)'s [ChatGPT](https://chat.openai.com)
 
