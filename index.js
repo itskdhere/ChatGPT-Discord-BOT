@@ -3,6 +3,9 @@ import dotenv from 'dotenv'; dotenv.config();
 import { ChatGPTAPIBrowser } from 'chatgpt';
 import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType} from 'discord.js';
 import axios from 'axios';
+import chalk from 'chalk';
+import figlet from 'figlet';
+import gradient from 'gradient-string';
 
 // Defines
 const MAX_RESPONSE_LENGTH = 2000 // Discord Max 2000 Characters
@@ -31,7 +34,9 @@ const commands = [
 // Initialize OpenAI Session & New ChatGPT Thread
 async function initOpenAI() {
     const loginType = process.env.LOGIN_TYPE;
-    if (loginType === 'openai') {
+    const accountType = process.env.ACCOUNT_TYPE;
+
+    if (loginType === 'openai' && accountType === 'free') {
         const api = new ChatGPTAPIBrowser({
             email: process.env.EMAIL,
             password: process.env.PASSWORD
@@ -39,7 +44,7 @@ async function initOpenAI() {
         await api.initSession();
         return api;
     }
-    else if (loginType === 'google') {
+    else if (loginType === 'google' && accountType === 'free') {
         const api = new ChatGPTAPIBrowser({
             email: process.env.EMAIL,
             password: process.env.PASSWORD,
@@ -48,8 +53,27 @@ async function initOpenAI() {
         await api.initSession();
         return api;
     }
+    else if (loginType === 'openai' && accountType === 'pro') {
+        const api = new ChatGPTAPIBrowser({
+            email: process.env.EMAIL,
+            password: process.env.PASSWORD,
+            isProAccount: true
+        });
+        await api.initSession();
+        return api;
+    }
+    else if (loginType === 'google' && accountType === 'pro') {
+        const api = new ChatGPTAPIBrowser({
+            email: process.env.EMAIL,
+            password: process.env.PASSWORD,
+            isGoogleLogin: true,
+            isProAccount: true
+        });
+        await api.initSession();
+        return api;
+    }
     else {
-        console.log('Not a valid loginType; use "google" or "openai" in .env file');
+        console.log(chalk.red('ChatGPT Error: Not a valid loginType or accountType'));
     }
 }
 
@@ -68,6 +92,14 @@ async function initDiscordCommands(api) {
 
 // Main Function (Execution Starts Here)
 async function main() {
+    console.log(gradient.pastel.multiline(figlet.textSync('ChatGPT', {
+        font: 'univers',
+        horizontalLayout: 'default',
+        verticalLayout: 'default',
+        width: 100,
+        whitespaceBreak: true
+    })));
+
     const chatGTP = await initOpenAI().catch(error => {
         console.error(error)
         process.exit()
@@ -88,8 +120,8 @@ async function main() {
     });
 
     client.once('ready', () => {
-        console.log(`Logged in as ${client.user.tag}!`);
-        console.log('Connected to Discord Gateway');
+        console.log(`Logged in as ${client.user.tag}`);
+        console.log(chalk.greenBright('Connected to Discord Gateway'));
         console.log(new Date())
         client.user.setStatus('online');
         client.user.setActivity('/ask');
@@ -143,14 +175,14 @@ async function main() {
                 // TODO: send to DB
             })
         } catch (e) {
-            console.error(e);
+            console.error(chalk.red(e));
         }
     }
 
     function askQuestion(question, cb) {
         let tmr = setTimeout((e) => {
             cb("Oppss, something went wrong! (Timeout)")
-            console.error(e)
+            console.error(chalk.red(e))
         }, 100000)
 
         chatGTP.sendMessage(question, {
@@ -162,7 +194,7 @@ async function main() {
             cb(response)
         }).catch((err) => {
             cb("Oppss, something went wrong! (Error)")
-            console.error("AskQuestion Error" + err)
+            console.error(chalk.red("AskQuestion Error:" + err))
         })
     }
 
@@ -174,7 +206,7 @@ async function main() {
         }
     }
 
-    client.login(process.env.DISCORD_BOT_TOKEN).catch(console.log);
+    client.login(process.env.DISCORD_BOT_TOKEN).catch(e => console.log(chalk.red(e)));
 }
 
 main() // Call Main function
@@ -192,4 +224,4 @@ setInterval(() => {
             }
         });
 
-}, 60000); // Every 1 Minute
+}, 30000); // Check Every 30 Second

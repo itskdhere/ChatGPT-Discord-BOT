@@ -1,23 +1,26 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "ChatGPT Discord BOT",
+  "author": "KD",
+  "license": "MIT",
+  "private": "true",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
   },
-  "keywords": [],
-  "author": "KD",
-  "license": "MIT",
   "dependencies": {
     "@types/node": "^18.0.6",
-    "axios": "^1.2.1",
-    "chatgpt": "^3.4.2",
+    "axios": "^1.2.3",
+    "chalk": "^5.2.0",
+    "chatgpt": "^3.5.1",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
+    "figlet": "^1.5.2",
+    "gradient-string": "^2.0.2",
     "node-fetch": "^3.2.6",
-    "puppeteer": "^19.4.0"
+    "puppeteer": "^19.5.2"
   }
 }
