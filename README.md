@@ -4,13 +4,17 @@ ChatGPT Discord BOT
 </h1>
 
 <p align="center">
+<img src="https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/ChatGPT.png" alt="ChatGPT">
+</p>
+
+<p align="center">
 <a href="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml" title="CodeQL">
 <img alt="CodeQL" src="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/codeql.yml/badge.svg?branch=main">
 </a>
 <a href="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml" title="OSSAR">
 <img alt="OSSAR" src="https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/ossar.yml/badge.svg?branch=main">
 </a>
-</p><br>
+</p>
 <p align="center">
 <a href="https://redirect.itskdhere.workers.dev/server/support/invite" title="Join Support Server"><img alt="Discord" src="https://img.shields.io/discord/917792741054894131?color=%235865F2&label=Join Support Server&logo=discord&logoColor=%23FFFFFF&style=for-the-badge"></a>
 </p>
@@ -21,9 +25,9 @@ ChatGPT Discord BOT
 [![Dependency Review](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml/badge.svg?branch=main)](https://github.com/itskdhere/ChatGPT-Discord-BOT/actions/workflows/dependency-review.yml) 
 -->
 
-A Discord BOT Powered By [OpenAI](https://openai.com/)'s [ChatGPT](https://chat.openai.com)
+A Discord BOT Powered By [OpenAI](https://openai.com/)'s [ChatGPT](https://chat.openai.com).
 
-This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-api) , [Discord.JS v14](https://github.com/discordjs/discord.js) & [Puppeteer v19](https://github.com/puppeteer/puppeteer)
+This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-api) , [Discord.JS v14](https://github.com/discordjs/discord.js) & [Puppeteer v19](https://github.com/puppeteer/puppeteer).
 
 ## ✨Features 
  🔥 Use slash command `/ask` to ask questions in any channel.
@@ -38,8 +42,9 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
 ### Requirements:
  - [Git](https://git-scm.com/)
  - [Node.js v18](https://nodejs.org/)
+ - [Google Chrome](https://www.google.com/chrome/)
  - [OpenAI Account](https://chat.openai.com/)
- - Atleast 1vCPU , 1GB RAM and 1GB Storage (For the **BOT Only**)
+ - Atleast 1vCPU , 0.5GB RAM and 0.5GB Storage (For the **BOT Only**)
 
 ### Steps:
 0. Create **New Application** [BOT] from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with proper *Bot Permissions* and *Privileged Gateway Intents*.
