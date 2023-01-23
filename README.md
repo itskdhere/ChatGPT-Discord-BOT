@@ -4,7 +4,7 @@ ChatGPT Discord BOT
 </h1>
 
 <p align="center">
-<img src="https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/ChatGPT.png" alt="ChatGPT">
+<img src="https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/ChatGPT.png">
 </p>
 
 <p align="center">
