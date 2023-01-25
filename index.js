@@ -81,12 +81,16 @@ async function initOpenAI() {
 async function initDiscordCommands(api) {
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
     try {
-        console.log('Started refreshing application (/) commands.');
-        await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID), { body: commands });
-        console.log('Successfully reloaded application (/) commands.');
+        console.log('Started refreshing application commands (/)');
+        await rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID), { body: commands }).then(() => {
+            console.log('Successfully reloaded application commands (/)');
+        }).catch(e => console.log(chalk.red(e)));
+        console.log('Connecting to Discord Gateway...');
+
     } catch (error) {
-        console.error(error);
+        console.log(chalk.red(error));
     }
+    
     res = await api.sendMessage('Hi'); // Init New Thread
 }
 
@@ -118,6 +122,8 @@ async function main() {
         ],
         partials: [Partials.Channel]
     });
+
+    client.login(process.env.DISCORD_BOT_TOKEN).catch(e => console.log(chalk.red(e)));
 
     client.once('ready', () => {
         console.log(`Logged in as ${client.user.tag}`);
@@ -163,13 +169,13 @@ async function main() {
         try {
             await interaction.reply({ content: "ChatGPT Is Processing Your Question..." });
             askQuestion(question, async (content) => {
-                console.log("Response : " + content.response);
+                console.log("Response    : " + content.response);
                 console.log("---------------End---------------");
                 if (content.length >= MAX_RESPONSE_LENGTH) {
                     await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." });
                     splitAndSendResponse(content.response, interaction.user);
                 } else {
-                    await interaction.editReply(content.response);
+                    await interaction.editReply(`${interaction.user.tag}: ${question}\nChatGPT: ${content.response}`);
                 }
                 client.user.setActivity('/ask');
                 // TODO: send to DB
@@ -205,8 +211,6 @@ async function main() {
             resp = resp.slice(end, resp.length)
         }
     }
-
-    client.login(process.env.DISCORD_BOT_TOKEN).catch(e => console.log(chalk.red(e)));
 }
 
 main() // Call Main function
