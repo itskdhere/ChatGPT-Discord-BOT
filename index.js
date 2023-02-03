@@ -175,7 +175,7 @@ async function main() {
                     await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." });
                     splitAndSendResponse(content.response, interaction.user);
                 } else {
-                    await interaction.editReply(`${interaction.user.tag}: ${question}\nChatGPT: ${content.response}`);
+                    await interaction.editReply(`${interaction.user.tag}: ${question}\n\nChatGPT: ${content.response}`);
                 }
                 client.user.setActivity('/ask');
                 // TODO: send to DB
