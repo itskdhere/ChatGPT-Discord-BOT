@@ -32,7 +32,9 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
 ## ✨Features 
  🔥 Use slash command `/ask` to ask questions in any channel.
  
- 💥 This uses **puppeteer** to automate the login process. Auto Solve CAPTCHA ✨
+ ✨ ChatGPT onProgress Typing Effect. Chalk, Figlet & Gradient-String for decoration.
+
+ 💥 This uses **puppeteer** to automate the login process. Auto Solve CAPTCHA.
  
  🔑 Uses Single ChatGPT Conversation Thread per Session.
  
@@ -44,7 +46,7 @@ This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-ap
  - [Node.js v18](https://nodejs.org/)
  - [Google Chrome](https://www.google.com/chrome/)
  - [OpenAI Account](https://chat.openai.com/)
- - Atleast 1vCPU , 0.5GB RAM and 0.5GB Storage (For the **BOT Only**)
+ - Atleast 1vCPU , 0.5GB RAM and 0.5GB Storage for the Bot.
 
 ### Steps:
 0. Create **New Application** [BOT] from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with proper *Bot Permissions* and *Privileged Gateway Intents*.
@@ -71,7 +73,12 @@ npm install
 ```bash
 npm run start
 ```
-6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api#captchas). If you're using Google Login then you can skip this step.
+- *or,* During development:
+```bash
+npm run dev
+```
+
+6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api/tree/v3#captchas).
 
 7. Use the BOT 🎉
 

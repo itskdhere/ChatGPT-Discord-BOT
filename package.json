@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "ChatGPT Discord BOT",
   "author": "KD",
   "license": "MIT",
@@ -9,7 +9,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "node --watch index.js"
   },
   "dependencies": {
     "@types/node": "^18.0.6",

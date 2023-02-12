@@ -1,14 +1,13 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
 import { ChatGPTAPIBrowser } from 'chatgpt';
-import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType} from 'discord.js';
+import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType } from 'discord.js';
 import axios from 'axios';
 import chalk from 'chalk';
 import figlet from 'figlet';
 import gradient from 'gradient-string';
 
 // Defines
-const MAX_RESPONSE_LENGTH = 2000 // Discord Max 2000 Characters
 let res; // ChatGPT Thread Identifier
 
 // Discord Slash Commands Defines
@@ -31,7 +30,7 @@ const commands = [
     }
 ];
 
-// Initialize OpenAI Session & New ChatGPT Thread
+// Initialize OpenAI Session
 async function initOpenAI() {
     const loginType = process.env.LOGIN_TYPE;
     const accountType = process.env.ACCOUNT_TYPE;
@@ -77,7 +76,7 @@ async function initOpenAI() {
     }
 }
 
-// Initialize Discord Application Commands
+// Initialize Discord Application Commands & New ChatGPT Thread
 async function initDiscordCommands(api) {
     const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
     try {
@@ -90,26 +89,28 @@ async function initDiscordCommands(api) {
     } catch (error) {
         console.log(chalk.red(error));
     }
-    
-    res = await api.sendMessage('Hi'); // Init New Thread
+
+    res = await api.sendMessage(process.env.CHATGPT_INITIAL_PROMPT); // Init New Thread
 }
 
-// Main Function (Execution Starts Here)
+// Main Function (Execution Starts From Here)
 async function main() {
-    console.log(gradient.pastel.multiline(figlet.textSync('ChatGPT', {
-        font: 'univers',
-        horizontalLayout: 'default',
-        verticalLayout: 'default',
-        width: 100,
-        whitespaceBreak: true
-    })));
+    if (process.env.UWU === 'true') {
+        console.log(gradient.pastel.multiline(figlet.textSync('ChatGPT', {
+            font: 'univers',
+            horizontalLayout: 'default',
+            verticalLayout: 'default',
+            width: 100,
+            whitespaceBreak: true
+        })));
+    }
 
-    const chatGTP = await initOpenAI().catch(error => {
-        console.error(error)
-        process.exit()
-    })
+    const api = await initOpenAI().catch(error => {
+        console.error(error);
+        process.exit();
+    });
 
-    await initDiscordCommands(chatGTP).catch(e => { console.log(e) });
+    await initDiscordCommands(api).catch(e => { console.log(e) });
 
     const client = new Client({
         intents: [
@@ -139,12 +140,14 @@ async function main() {
 
         client.user.setActivity(interaction.user.tag, { type: ActivityType.Watching });
 
+        interaction.channel.sendTyping();
+
         switch (interaction.commandName) {
             case "ask":
-                ask_Interaction_Handler(interaction)
+                ask_Interaction_Handler(interaction);
                 break;
             case "ping":
-                ping_Interaction_Handler(interaction)
+                ping_Interaction_Handler(interaction);
                 break;
             default:
                 await interaction.reply({ content: 'Command Not Found' });
@@ -165,17 +168,17 @@ async function main() {
         console.log("UserId      : " + interaction.user.id);
         console.log("User        : " + interaction.user.tag);
         console.log("Question    : " + question);
-        // TODO: send to DB
+
         try {
-            await interaction.reply({ content: "ChatGPT Is Processing Your Question..." });
-            askQuestion(question, async (content) => {
+            await interaction.reply({ content: `${client.user.username} Is Processing Your Question...` });
+            askQuestion(question, interaction, async (content) => {
                 console.log("Response    : " + content.response);
                 console.log("---------------End---------------");
-                if (content.length >= MAX_RESPONSE_LENGTH) {
-                    await interaction.editReply({ content: "The answer to this question is very long, so I will answer by dm." });
+                if (content.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
+                    await interaction.editReply({ content: "The answer to this question is very long, so I'll answer by DM." });
                     splitAndSendResponse(content.response, interaction.user);
                 } else {
-                    await interaction.editReply(`${interaction.user.tag}: ${question}\n\nChatGPT: ${content.response}`);
+                    await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** ${content.response}\n</>`);
                 }
                 client.user.setActivity('/ask');
                 // TODO: send to DB
@@ -185,35 +188,50 @@ async function main() {
         }
     }
 
-    function askQuestion(question, cb) {
+    function askQuestion(question, interaction, cb) {
         let tmr = setTimeout((e) => {
             cb("Oppss, something went wrong! (Timeout)")
             console.error(chalk.red(e))
-        }, 100000)
+        }, 100000);
 
-        chatGTP.sendMessage(question, {
-            conversationId: res.conversationId,
-            parentMessageId: res.messageId
-        }).then((response) => {
-            clearTimeout(tmr)
-            res = response;
-            cb(response)
-        }).catch((err) => {
-            cb("Oppss, something went wrong! (Error)")
-            console.error(chalk.red("AskQuestion Error:" + err))
-        })
+        if (process.env.TYPING_EFFECT === 'true') {
+            api.sendMessage(question, {
+                conversationId: res.conversationId,
+                parentMessageId: res.messageId,
+                onProgress: (partialResponse) => {
+                    interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** ${partialResponse?.response}`);
+                }
+            }).then((response) => {
+                clearTimeout(tmr);
+                res = response;
+                cb(response);
+            }).catch((err) => {
+                cb("Oppss, something went wrong! (Error)");
+                console.error(chalk.red("AskQuestion Error:" + err));
+            })
+        } else {
+            api.sendMessage(question, {
+                conversationId: res.conversationId,
+                parentMessageId: res.messageId
+            }).then((response) => {
+                clearTimeout(tmr);
+                res = response;
+                cb(response);
+            }).catch((err) => {
+                cb("Oppss, something went wrong! (Error)")
+                console.error(chalk.red("AskQuestion Error:" + err))
+            })
+        }
     }
 
     async function splitAndSendResponse(resp, user) {
         while (resp.length > 0) {
-            let end = Math.min(MAX_RESPONSE_LENGTH, resp.length)
+            let end = Math.min(process.env.DISCORD_MAX_RESPONSE_LENGTH, resp.length)
             await user.send(resp.slice(0, end))
             resp = resp.slice(end, resp.length)
         }
     }
 }
-
-main() // Call Main function
 
 // Discord Rate Limit Check
 setInterval(() => {
@@ -229,3 +247,7 @@ setInterval(() => {
         });
 
 }, 30000); // Check Every 30 Second
+
+main() // Call Main function
+
+// ---EoC---
