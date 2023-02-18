@@ -1,8 +1,8 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "2.4.0",
-  "description": "ChatGPT Discord BOT",
-  "author": "KD",
+  "version": "2.5.0",
+  "description": "A Discord BOT Powered By OpenAI's ChatGPT",
+  "author": "itskdhere",
   "license": "MIT",
   "private": "true",
   "main": "index.js",
