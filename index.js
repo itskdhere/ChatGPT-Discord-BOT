@@ -97,7 +97,7 @@ async function initDiscordCommands(api) {
 async function main() {
     if (process.env.UWU === 'true') {
         console.log(gradient.pastel.multiline(figlet.textSync('ChatGPT', {
-            font: 'univers',
+            font: 'Univers',
             horizontalLayout: 'default',
             verticalLayout: 'default',
             width: 100,
@@ -139,8 +139,6 @@ async function main() {
         if (!interaction.isChatInputCommand()) return;
 
         client.user.setActivity(interaction.user.tag, { type: ActivityType.Watching });
-
-        interaction.channel.sendTyping();
 
         switch (interaction.commandName) {
             case "ask":
