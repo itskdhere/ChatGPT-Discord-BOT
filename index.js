@@ -38,7 +38,8 @@ async function initOpenAI() {
     if (loginType === 'openai' && accountType === 'free') {
         const api = new ChatGPTAPIBrowser({
             email: process.env.EMAIL,
-            password: process.env.PASSWORD
+            password: process.env.PASSWORD,
+            debug: process.env.DEBUG
         });
         await api.initSession();
         return api;
@@ -47,7 +48,8 @@ async function initOpenAI() {
         const api = new ChatGPTAPIBrowser({
             email: process.env.EMAIL,
             password: process.env.PASSWORD,
-            isGoogleLogin: true
+            isGoogleLogin: true,
+            debug: process.env.DEBUG
         });
         await api.initSession();
         return api;
@@ -56,7 +58,8 @@ async function initOpenAI() {
         const api = new ChatGPTAPIBrowser({
             email: process.env.EMAIL,
             password: process.env.PASSWORD,
-            isProAccount: true
+            isProAccount: true,
+            debug: process.env.DEBUG
         });
         await api.initSession();
         return api;
@@ -66,7 +69,8 @@ async function initOpenAI() {
             email: process.env.EMAIL,
             password: process.env.PASSWORD,
             isGoogleLogin: true,
-            isProAccount: true
+            isProAccount: true,
+            debug: process.env.DEBUG
         });
         await api.initSession();
         return api;
