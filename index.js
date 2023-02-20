@@ -172,7 +172,7 @@ async function main() {
             askQuestion(question, interaction, async (content) => {
                 console.log("Response    : " + content.response);
                 console.log("---------------End---------------");
-                if (content.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
+                if (content.response.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
                     await interaction.editReply({ content: "The answer to this question is very long, so I'll answer by DM." });
                     splitAndSendResponse(content.response, interaction.user);
                 } else {
