@@ -20,7 +20,9 @@
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "figlet": "^1.5.2",
+    "firebase-admin": "^11.5.0",
     "gradient-string": "^2.0.2",
-    "node-fetch": "^3.2.6"
+    "node-fetch": "^3.2.6",
+    "openai": "^3.2.1"
   }
 }

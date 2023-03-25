@@ -1,14 +1,17 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
 import { ChatGPTAPI } from 'chatgpt';
-import { Client, GatewayIntentBits, REST, Routes, Partials, ActivityType } from 'discord.js';
 import axios from 'axios';
 import chalk from 'chalk';
 import figlet from 'figlet';
 import gradient from 'gradient-string';
-
-// Defines
-let res; // ChatGPT Thread Identifier
+import admin from 'firebase-admin';
+import {
+  Client, MessageMentions, REST,
+  GatewayIntentBits,
+  Routes, Partials, ActivityType
+}
+  from 'discord.js';
 
 // Discord Slash Commands Defines
 const commands = [
@@ -27,20 +30,31 @@ const commands = [
   {
     name: 'ping',
     description: 'Check Websocket Heartbeat && Roundtrip Latency'
+  },
+  {
+    name: 'reset-chat',
+    description: 'Start A fresh Chat Session'
   }
 ];
 
 // Initialize OpenAI Session
 async function initOpenAI() {
-  const api = new ChatGPTAPI({
-    apiKey: process.env.OPENAI_ACCESS_TOKEN, // you need to set the key provided by the bot
-    apiBaseUrl: "https://api.pawan.krd/v1"
-  })
-  return api;
+  if (process.env.API_ENDPOINT.toLocaleLowerCase() === 'default') {
+    const api = new ChatGPTAPI({
+      apiKey: process.env.OPENAI_API_KEY
+    });
+    return api;
+  } else {
+    const api = new ChatGPTAPI({
+      apiKey: process.env.OPENAI_API_KEY,
+      apiBaseUrl: process.env.API_ENDPOINT.toLocaleLowerCase()
+    });
+    return api;
+  }
 }
 
 // Initialize Discord Application Commands & New ChatGPT Thread
-async function initDiscordCommands(api) {
+async function initDiscordCommands() {
   const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_BOT_TOKEN);
   try {
     console.log('Started refreshing application commands (/)');
@@ -52,8 +66,17 @@ async function initDiscordCommands(api) {
   } catch (error) {
     console.log(chalk.red(error));
   }
+}
 
-  res = await api.sendMessage(process.env.CHATGPT_INITIAL_PROMPT); // Init New Thread
+async function initFirebaseAdmin() {
+  admin.initializeApp({
+    credential: admin.credential.cert(process.env.FIREBASE_ADMIN_SDK_PATH),
+    databaseURL: process.env.FIRESTORE_DATABASE_URL
+  });
+
+  const db = admin.firestore();
+
+  return db;
 }
 
 // Main Function (Execution Starts From Here)
@@ -73,7 +96,9 @@ async function main() {
     process.exit();
   });
 
-  await initDiscordCommands(api).catch(e => { console.log(e) });
+  await initDiscordCommands().catch(e => { console.log(e) });
+
+  const db = await initFirebaseAdmin();
 
   const client = new Client({
     intents: [
@@ -110,6 +135,9 @@ async function main() {
       case "ping":
         ping_Interaction_Handler(interaction);
         break;
+      case 'reset-chat':
+        reset_chat_Interaction_Handler(interaction);
+        break;
       default:
         await interaction.reply({ content: 'Command Not Found' });
     }
@@ -117,7 +145,25 @@ async function main() {
 
   async function ping_Interaction_Handler(interaction) {
     const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
-    interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
+    await interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
+    client.user.setActivity('/ask');
+  }
+
+  async function reset_chat_Interaction_Handler(interaction) {
+    await interaction.reply('Checking...');
+    const doc = await db.collection('users').doc(interaction.user.id).get();
+    if (!doc.exists) {
+      console.log('Chat Reset: Failed ❌');
+      await interaction.editReply('Chat Reset: Failed ❌');
+    } else {
+      // await db.collection('users').doc(interaction.user.id).update({
+      //   conversationId: FieldValue.delete(),
+      //   parentMessageId: FieldValue.delete()
+      // });
+      await db.collection('users').doc(interaction.user.id).delete();
+      console.log('Chat Reset: Successful ✔');
+      await interaction.editReply('Chat Reset: Successful ✔');
+    }
     client.user.setActivity('/ask');
   }
 
@@ -131,7 +177,7 @@ async function main() {
     console.log("Question    : " + question);
 
     try {
-      await interaction.reply({ content: `${client.user.username} Is Processing Your Question...` });
+      await interaction.reply({ content: `${client.user.username} Is Processing Your Question... ` });
       askQuestion(question, interaction, async (content) => {
         console.log("Response    : " + content.text);
         console.log("---------------End---------------");
@@ -142,45 +188,64 @@ async function main() {
           await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** ${content.text}\n</>`);
         }
         client.user.setActivity('/ask');
-        // TODO: send to DB
+        const timeStamp = new Date();
+        const date = timeStamp.getDate().toString();
+        const time = timeStamp.getTime().toString();
+        await db.collection('chat-history').doc(interaction.user.id)
+          .collection(date).doc(time).set({
+            timeStamp: new Date(),
+            userID: interaction.user.id,
+            user: interaction.user.tag,
+            question: question,
+            answer: content.text,
+            conversationId: content.id,
+            parentMessageId: content.parentMessageId
+          });
+
       })
     } catch (e) {
       console.error(chalk.red(e));
     }
   }
 
-  function askQuestion(question, interaction, cb) {
-    let tmr = setTimeout((e) => {
-      cb("Oppss, something went wrong! (Timeout)")
-      console.error(chalk.red(e))
-    }, 100000);
-
-    if (process.env.TYPING_EFFECT === 'true') {
-      api.sendMessage(question, {
-        conversationId: res.conversationId,
-        parentMessageId: res.messageId,
-        onProgress: (partialResponse) => {
-          interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** ${partialResponse?.response}`);
-        }
-      }).then((response) => {
-        clearTimeout(tmr);
-        res = response;
+  async function askQuestion(question, interaction, cb) {
+    const docRef = db.collection('users').doc(interaction.user.id);
+    const doc = await docRef.get()
+    if (!doc.exists) {
+      api.sendMessage(question).then((response) => {
+        db.collection('users').doc(interaction.user.id).set({
+          userId: interaction.user.id,
+          user: interaction.user.tag,
+          conversationId: response.id,
+          parentMessageId: response.parentMessageId
+        });
         cb(response);
       }).catch((err) => {
         cb("Oppss, something went wrong! (Error)");
         console.error(chalk.red("AskQuestion Error:" + err));
       })
+
     } else {
+      const conversationId = doc.data().conversationId;
+      const parentMessageId = doc.data().parentMessageId
+      console.log(conversationId)
+      console.log(parentMessageId)
       api.sendMessage(question, {
-        conversationId: res.conversationId,
-        parentMessageId: res.messageId
+        conversationId: conversationId,
+        parentMessageId: parentMessageId
       }).then((response) => {
-        clearTimeout(tmr);
-        res = response;
+        console.log(response.id)
+        console.log(response.parentMessageId)
+        db.collection('users').doc(interaction.user.id).set({
+          userId: interaction.user.id,
+          user: interaction.user.tag,
+          conversationId: response.id,
+          parentMessageId: response.parentMessageId
+        });
         cb(response);
       }).catch((err) => {
-        cb("Oppss, something went wrong! (Error)")
-        console.error(chalk.red("AskQuestion Error:" + err))
+        cb("Oppss, something went wrong! (Error)");
+        console.error(chalk.red("AskQuestion Error:" + err));
       })
     }
   }

@@ -1,6 +1,8 @@
 # Misc.
 tmp/
 temp/
+db.js
+firebase-admin-sdk.json
 
 # Replit
 .replit
