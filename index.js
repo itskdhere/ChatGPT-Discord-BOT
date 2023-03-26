@@ -175,6 +175,19 @@ async function main() {
         }
         console.log("Response    : " + response.text);
         console.log("---------------End---------------");
+        const timeStamp = new Date();
+        const date = timeStamp.getDate().toString();
+        const time = timeStamp.getTime().toString();
+        await db.collection('dm-history').doc(interaction.user.id)
+          .collection(date).doc(time).set({
+            timeStamp: new Date(),
+            userID: interaction.user.id,
+            user: interaction.user.tag,
+            question: message.content,
+            answer: response.text,
+            conversationId: response.id,
+            parentMessageId: response.parentMessageId
+          });
       })
     } catch (e) {
       console.error(e)
@@ -215,12 +228,12 @@ async function main() {
     console.log("Question    : " + question);
 
     try {
-      await interaction.reply({ content: `${client.user.username} Is Processing Your Question... ` });
+      await interaction.reply({ content: `Let Me Think 🤔` });
       askQuestion(question, interaction, async (content) => {
         console.log("Response    : " + content.text);
         console.log("---------------End---------------");
         if (content.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
-          await interaction.editReply({ content: "The answer to this question is very long, so I'll answer by DM." });
+          await interaction.editReply({ content: "The Answer Is Too Powerful 🤯,\nCheck Your DM 😅" });
           splitAndSendResponse(content.text, interaction.user);
         } else {
           await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** ${content.text}\n</>`);
