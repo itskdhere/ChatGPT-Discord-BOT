@@ -80,9 +80,7 @@ async function initFirebaseAdmin() {
     credential: admin.credential.cert(process.env.FIREBASE_ADMIN_SDK_PATH),
     databaseURL: process.env.FIRESTORE_DATABASE_URL
   });
-
   const db = admin.firestore();
-
   return db;
 }
 
@@ -312,7 +310,7 @@ async function main() {
       }).catch((err) => {
         cb("Oppss, something went wrong! (Error)");
         console.error(chalk.red("AskQuestion Error:" + err));
-      })
+      });
     }
   }
 
