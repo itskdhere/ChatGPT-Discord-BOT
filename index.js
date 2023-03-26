@@ -7,11 +7,14 @@ import figlet from 'figlet';
 import gradient from 'gradient-string';
 import admin from 'firebase-admin';
 import {
-  Client, MessageMentions, REST,
-  GatewayIntentBits, ChannelType,
-  Routes, Partials, ActivityType
+  Client, REST, Partials,
+  GatewayIntentBits, Routes,
+  ActivityType, ChannelType
 }
   from 'discord.js';
+
+// Defines
+const activity = '/ask && /help'
 
 // Discord Slash Commands Defines
 const commands = [
@@ -33,7 +36,11 @@ const commands = [
   },
   {
     name: 'reset-chat',
-    description: 'Start A fresh Chat Session'
+    description: 'Start A Fresh Chat Session'
+  },
+  {
+    name: 'help',
+    description: 'Get Help'
   }
 ];
 
@@ -119,7 +126,7 @@ async function main() {
     console.log(chalk.greenBright('Connected to Discord Gateway'));
     console.log(new Date())
     client.user.setStatus('online');
-    client.user.setActivity('/ask');
+    client.user.setActivity(activity);
   });
 
   // Channel Message Handler
@@ -134,6 +141,9 @@ async function main() {
         break;
       case "ping":
         ping_Interaction_Handler(interaction);
+        break;
+      case "help":
+        help_Interaction_Handler(interaction);
         break;
       case 'reset-chat':
         reset_chat_Interaction_Handler(interaction);
@@ -197,7 +207,12 @@ async function main() {
   async function ping_Interaction_Handler(interaction) {
     const sent = await interaction.reply({ content: 'Pinging...🌐', fetchReply: true });
     await interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
-    client.user.setActivity('/ask');
+    client.user.setActivity(activity);
+  }
+
+  async function help_Interaction_Handler(interaction) {
+    await interaction.reply("**ChatGPT Discord Bot**\nA Discord Bot Powered By OpenAI's ChatGPT !\n\n**Usage:**\n`/ask` - Ask Anything\n`/reset-chat` - Start A Fresh Chat Session\n`/ping` - Check Websocket Heartbeat && Roundtrip Latency\n\nSupport Server: https://dsc.gg/skdm\nSource Code: https://github.com/itskdhere/ChatGPT-Discord-BOT\n</>");
+    client.user.setActivity(activity);
   }
 
   async function reset_chat_Interaction_Handler(interaction) {
@@ -215,7 +230,7 @@ async function main() {
       console.log('Chat Reset: Successful ✅');
       await interaction.editReply('Chat Reset: Successful ✅');
     }
-    client.user.setActivity('/ask');
+    client.user.setActivity(activity);
   }
 
   async function ask_Interaction_Handler(interaction) {
@@ -238,7 +253,7 @@ async function main() {
         } else {
           await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** ${content.text}\n</>`);
         }
-        client.user.setActivity('/ask');
+        client.user.setActivity(activity);
         const timeStamp = new Date();
         const date = timeStamp.getDate().toString();
         const time = timeStamp.getTime().toString();
@@ -278,7 +293,7 @@ async function main() {
 
     } else {
       const conversationId = doc.data().conversationId;
-      const parentMessageId = doc.data().parentMessageId
+      const parentMessageId = doc.data().parentMessageId;
       console.log(conversationId)
       console.log(parentMessageId)
       api.sendMessage(question, {
