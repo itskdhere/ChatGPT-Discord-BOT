@@ -8,7 +8,7 @@ import gradient from 'gradient-string';
 import admin from 'firebase-admin';
 import {
   Client, MessageMentions, REST,
-  GatewayIntentBits,
+  GatewayIntentBits, ChannelType,
   Routes, Partials, ActivityType
 }
   from 'discord.js';
@@ -143,14 +143,52 @@ async function main() {
     }
   });
 
+  client.on("messageCreate", async message => {
+    if (process.env.DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
+      return;
+    }
+
+    if (!process.env.DM_WHITELIST_ID.includes(message.author.id)) {
+      await message.author.send("Ask Bot Owner To WhiteList Your ID 🙄");
+      return;
+    }
+
+    console.log("----------Direct Message---------");
+    console.log("Date & Time : " + new Date());
+    console.log("UserId      : " + message.author.id);
+    console.log("User        : " + message.author.tag);
+    console.log("Question    : " + message.content);
+
+    try {
+      let sentMessage = await message.author.send("Let Me Think 🤔")
+      let interaction = {
+        "user": {
+          "id": message.author.id,
+          'tag': message.author.tag
+        }
+      }
+      askQuestion(message.content, interaction, async (response) => {
+        if (response.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
+          splitAndSendResponse(response.text, message.author)
+        } else {
+          await sentMessage.edit(response.text)
+        }
+        console.log("Response    : " + response.text);
+        console.log("---------------End---------------");
+      })
+    } catch (e) {
+      console.error(e)
+    }
+  })
+
   async function ping_Interaction_Handler(interaction) {
-    const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+    const sent = await interaction.reply({ content: 'Pinging...🌐', fetchReply: true });
     await interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
     client.user.setActivity('/ask');
   }
 
   async function reset_chat_Interaction_Handler(interaction) {
-    await interaction.reply('Checking...');
+    await interaction.reply('Checking...💨');
     const doc = await db.collection('users').doc(interaction.user.id).get();
     if (!doc.exists) {
       console.log('Chat Reset: Failed ❌');
@@ -161,8 +199,8 @@ async function main() {
       //   parentMessageId: FieldValue.delete()
       // });
       await db.collection('users').doc(interaction.user.id).delete();
-      console.log('Chat Reset: Successful ✔');
-      await interaction.editReply('Chat Reset: Successful ✔');
+      console.log('Chat Reset: Successful ✅');
+      await interaction.editReply('Chat Reset: Successful ✅');
     }
     client.user.setActivity('/ask');
   }
