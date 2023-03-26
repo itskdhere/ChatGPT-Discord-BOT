@@ -48,13 +48,15 @@ const commands = [
 async function initOpenAI() {
   if (process.env.API_ENDPOINT.toLocaleLowerCase() === 'default') {
     const api = new ChatGPTAPI({
-      apiKey: process.env.OPENAI_API_KEY
+      apiKey: process.env.OPENAI_API_KEY,
+      debug: process.env.DEBUG
     });
     return api;
   } else {
     const api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
-      apiBaseUrl: process.env.API_ENDPOINT.toLocaleLowerCase()
+      apiBaseUrl: process.env.API_ENDPOINT.toLocaleLowerCase(),
+      debug: process.env.DEBUG
     });
     return api;
   }
