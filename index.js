@@ -195,8 +195,7 @@ async function main() {
             user: interaction.user.tag,
             question: message.content,
             answer: response.text,
-            conversationId: response.id,
-            parentMessageId: response.parentMessageId
+            parentMessageId: response.id
           });
       })
     } catch (e) {
@@ -222,10 +221,6 @@ async function main() {
       console.log('Chat Reset: Failed ❌');
       await interaction.editReply('Chat Reset: Failed ❌');
     } else {
-      // await db.collection('users').doc(interaction.user.id).update({
-      //   conversationId: FieldValue.delete(),
-      //   parentMessageId: FieldValue.delete()
-      // });
       await db.collection('users').doc(interaction.user.id).delete();
       console.log('Chat Reset: Successful ✅');
       await interaction.editReply('Chat Reset: Successful ✅');
@@ -264,8 +259,7 @@ async function main() {
             user: interaction.user.tag,
             question: question,
             answer: content.text,
-            conversationId: content.id,
-            parentMessageId: content.parentMessageId
+            parentMessageId: content.id
           });
 
       })
@@ -275,38 +269,28 @@ async function main() {
   }
 
   async function askQuestion(question, interaction, cb) {
-    const docRef = db.collection('users').doc(interaction.user.id);
-    const doc = await docRef.get()
+    const doc = await db.collection('users').doc(interaction.user.id).get();
+
     if (!doc.exists) {
       api.sendMessage(question).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           userId: interaction.user.id,
           user: interaction.user.tag,
-          conversationId: response.id,
-          parentMessageId: response.parentMessageId
+          parentMessageId: response.id
         });
         cb(response);
       }).catch((err) => {
         cb("Oppss, something went wrong! (Error)");
         console.error(chalk.red("AskQuestion Error:" + err));
       })
-
     } else {
-      const conversationId = doc.data().conversationId;
-      const parentMessageId = doc.data().parentMessageId;
-      console.log(conversationId)
-      console.log(parentMessageId)
       api.sendMessage(question, {
-        conversationId: conversationId,
-        parentMessageId: parentMessageId
+        parentMessageId: doc.data().parentMessageId
       }).then((response) => {
-        console.log(response.id)
-        console.log(response.parentMessageId)
         db.collection('users').doc(interaction.user.id).set({
           userId: interaction.user.id,
           user: interaction.user.tag,
-          conversationId: response.id,
-          parentMessageId: response.parentMessageId
+          parentMessageId: response.id
         });
         cb(response);
       }).catch((err) => {
