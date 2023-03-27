@@ -93,9 +93,9 @@ cd ChatGPT-Discord-BOT
 npm install
 ```
 
-4. To setup Environment Variables, Create a `.env` file in the root directory ***or*** Rename the `.env.example` file to `.env`. Then fill the credentials properly by following [this instruction]().
+4. To setup Environment Variables, Create a `.env` file in the root directory ***or*** Rename the `.env.example` file to `.env`. Then fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#2-environment-variables-setup).
 
-5. Setup Firebase FireStore Database by following [this instruction]().
+5. Setup Firebase FireStore Database by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#3-database-setup).
 
 6. Start the BOT: 
 ```bash
