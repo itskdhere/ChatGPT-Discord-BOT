@@ -101,6 +101,14 @@ npm install
 ```bash
 npm run start
 ```
+*Or,* During Development:
+```bash
+npm run dev
+```
+*Or,* In Production:
+```bash
+npm run prod
+```
 
 7. Use the BOT 🎉
 
