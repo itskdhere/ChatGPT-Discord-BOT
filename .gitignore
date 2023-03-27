@@ -1,6 +1,7 @@
 # Misc.
 tmp/
 temp/
+firebaseServiceAccountKey.json
 
 # Replit
 .replit

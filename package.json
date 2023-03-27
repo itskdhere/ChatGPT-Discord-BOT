@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "description": "A Discord BOT Powered By OpenAI's ChatGPT",
   "author": "itskdhere",
   "license": "MIT",
@@ -16,12 +16,15 @@
     "@types/node": "^18.0.6",
     "axios": "^1.2.3",
     "chalk": "^5.2.0",
-    "chatgpt": "^3.5.1",
+    "chatgpt": "^5.1.2",
     "discord.js": "^14.7.1",
     "dotenv": "^16.0.3",
     "figlet": "^1.5.2",
+    "firebase-admin": "^11.5.0",
     "gradient-string": "^2.0.2",
+    "keyv": "^4.5.2",
+    "keyv-firestore": "^1.1.1",
     "node-fetch": "^3.2.6",
-    "puppeteer": "^19.5.2"
+    "openai": "^3.2.1"
   }
 }
