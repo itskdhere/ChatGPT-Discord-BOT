@@ -78,7 +78,6 @@ async function initDiscordCommands() {
       console.log('Successfully reloaded application commands (/)');
     }).catch(e => console.log(chalk.red(e)));
     console.log('Connecting to Discord Gateway...');
-
   } catch (error) {
     console.log(chalk.red(error));
   }
@@ -104,13 +103,6 @@ async function initKeyvFirestore() {
   return messageStore;
 }
 
-// async function initKeyvRedis() {
-//   const redisUrl = process.env.REDIS_URL
-//   const store = new KeyvRedis(redisUrl)
-//   const messageStore = new Keyv({ store, namespace: 'chatgpt-demo' })
-//   return messageStore;
-// }
-
 // Main Function (Execution Starts From Here)
 async function main() {
   if (process.env.UWU === 'true') {
@@ -124,8 +116,8 @@ async function main() {
   }
 
   const db = await initFirebaseAdmin();
+
   const messageStore = await initKeyvFirestore();
-  // const messageStore = await initKeyvRedis();
 
   const api = await initOpenAI(messageStore).catch(error => {
     console.error(error);
@@ -180,6 +172,7 @@ async function main() {
     }
   });
 
+  // Direct Message Handler
   client.on("messageCreate", async message => {
     if (process.env.DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
       return;
@@ -197,13 +190,15 @@ async function main() {
     console.log("Question    : " + message.content);
 
     try {
-      let sentMessage = await message.author.send("Let Me Think 🤔")
+      let sentMessage = await message.author.send("Let Me Think 🤔");
+
       let interaction = {
         "user": {
           "id": message.author.id,
           'tag': message.author.tag
         }
       }
+
       askQuestion(message.content, interaction, async (response) => {
         if (response.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
           splitAndSendResponse(response.text, message.author)
@@ -224,9 +219,6 @@ async function main() {
             answer: response.text,
             parentMessageId: response.id
           });
-        // await db.collection('messages').doc(response.id).set({
-        //   message: response.text
-        // });
       })
     } catch (e) {
       console.error(e)
@@ -235,7 +227,7 @@ async function main() {
 
   async function ping_Interaction_Handler(interaction) {
     const sent = await interaction.reply({ content: 'Pinging...🌐', fetchReply: true });
-    await interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms`);
+    await interaction.editReply(`Websocket Heartbeat: ${interaction.client.ws.ping} ms. \nRoundtrip Latency: ${sent.createdTimestamp - interaction.createdTimestamp} ms\n</>`);
     client.user.setActivity(activity);
   }
 
@@ -245,15 +237,15 @@ async function main() {
   }
 
   async function reset_chat_Interaction_Handler(interaction) {
-    await interaction.reply('Checking...💨');
+    await interaction.reply('Checking...📚');
     const doc = await db.collection('users').doc(interaction.user.id).get();
     if (!doc.exists) {
-      console.log('Chat Reset: Failed ❌');
-      await interaction.editReply('Chat Reset: Failed ❌');
+      console.log('Failed: No Conversation Found ❌');
+      await interaction.editReply('No Conversation Found ❌\nUse `/ask` To Start One\n</>');
     } else {
       await db.collection('users').doc(interaction.user.id).delete();
       console.log('Chat Reset: Successful ✅');
-      await interaction.editReply('Chat Reset: Successful ✅');
+      await interaction.editReply('Chat Reset: Successful ✅\n</>');
     }
     client.user.setActivity(activity);
   }
@@ -291,9 +283,6 @@ async function main() {
             answer: content.text,
             parentMessageId: content.id
           });
-        // await db.collection('messages').doc(content.id).set({
-        //   message: content.text
-        // });
       })
     } catch (e) {
       console.error(chalk.red(e));
@@ -331,13 +320,6 @@ async function main() {
       });
     }
   }
-
-  // await new Promise((resolve) => {
-  //   setTimeout(() => {
-  //     messageStore.disconnect()
-  //     resolve()
-  //   }, 1000)
-  // });
 
   async function splitAndSendResponse(resp, user) {
     while (resp.length > 0) {
