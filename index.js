@@ -6,12 +6,17 @@ import chalk from 'chalk';
 import figlet from 'figlet';
 import gradient from 'gradient-string';
 import admin from 'firebase-admin';
+import Keyv from 'keyv';
+import KeyvFirestore from 'keyv-firestore';
 import {
   Client, REST, Partials,
   GatewayIntentBits, Routes,
   ActivityType, ChannelType
 }
   from 'discord.js';
+
+// Import Firebase Admin SDK Service Account Private Key
+import firebaseServiceAccount from './firebaseServiceAccountKey.json' assert {type: 'json'}
 
 // Defines
 const activity = '/ask && /help'
@@ -45,10 +50,11 @@ const commands = [
 ];
 
 // Initialize OpenAI Session
-async function initOpenAI() {
+async function initOpenAI(messageStore) {
   if (process.env.API_ENDPOINT.toLocaleLowerCase() === 'default') {
     const api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
+      messageStore,
       debug: process.env.DEBUG
     });
     return api;
@@ -56,6 +62,7 @@ async function initOpenAI() {
     const api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
       apiBaseUrl: process.env.API_ENDPOINT.toLocaleLowerCase(),
+      messageStore,
       debug: process.env.DEBUG
     });
     return api;
@@ -79,12 +86,30 @@ async function initDiscordCommands() {
 
 async function initFirebaseAdmin() {
   admin.initializeApp({
-    credential: admin.credential.cert(process.env.FIREBASE_ADMIN_SDK_PATH),
-    databaseURL: process.env.FIRESTORE_DATABASE_URL
+    credential: admin.credential.cert(firebaseServiceAccount),
+    databaseURL: `https://${firebaseServiceAccount.project_id}.firebaseio.com`
   });
   const db = admin.firestore();
   return db;
 }
+
+async function initKeyvFirestore() {
+  const messageStore = new Keyv({
+    store: new KeyvFirestore({
+      projectId: firebaseServiceAccount.project_id,
+      collection: 'messageStore',
+      credentials: firebaseServiceAccount
+    })
+  });
+  return messageStore;
+}
+
+// async function initKeyvRedis() {
+//   const redisUrl = process.env.REDIS_URL
+//   const store = new KeyvRedis(redisUrl)
+//   const messageStore = new Keyv({ store, namespace: 'chatgpt-demo' })
+//   return messageStore;
+// }
 
 // Main Function (Execution Starts From Here)
 async function main() {
@@ -98,14 +123,16 @@ async function main() {
     })));
   }
 
-  const api = await initOpenAI().catch(error => {
+  const db = await initFirebaseAdmin();
+  const messageStore = await initKeyvFirestore();
+  // const messageStore = await initKeyvRedis();
+
+  const api = await initOpenAI(messageStore).catch(error => {
     console.error(error);
     process.exit();
   });
 
   await initDiscordCommands().catch(e => { console.log(e) });
-
-  const db = await initFirebaseAdmin();
 
   const client = new Client({
     intents: [
@@ -197,6 +224,9 @@ async function main() {
             answer: response.text,
             parentMessageId: response.id
           });
+        // await db.collection('messages').doc(response.id).set({
+        //   message: response.text
+        // });
       })
     } catch (e) {
       console.error(e)
@@ -261,7 +291,9 @@ async function main() {
             answer: content.text,
             parentMessageId: content.id
           });
-
+        // await db.collection('messages').doc(content.id).set({
+        //   message: content.text
+        // });
       })
     } catch (e) {
       console.error(chalk.red(e));
@@ -299,6 +331,13 @@ async function main() {
       });
     }
   }
+
+  // await new Promise((resolve) => {
+  //   setTimeout(() => {
+  //     messageStore.disconnect()
+  //     resolve()
+  //   }, 1000)
+  // });
 
   async function splitAndSendResponse(resp, user) {
     while (resp.length > 0) {

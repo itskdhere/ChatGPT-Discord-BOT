@@ -1,8 +1,7 @@
 # Misc.
 tmp/
 temp/
-db.js
-firebase-admin-sdk.json
+firebaseServiceAccountKey.json
 
 # Replit
 .replit
