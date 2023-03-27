@@ -4,7 +4,7 @@ ChatGPT Discord BOT
 </h1>
 
 <p align="center">
-<img src="ChatGPT.svg">
+<img src="img/ChatGPT.svg">
 </p>
 
 <p align="center">
@@ -20,7 +20,7 @@ ChatGPT Discord BOT
 </p>
 
 <p align="center">
-<a href="https://redirect.itskdhere.workers.dev/server/support/invite" title="Join Support Server"><img alt="Discord" src="https://img.shields.io/discord/917792741054894131?color=%235865F2&label=Join Support Server&logo=discord&logoColor=%23FFFFFF&style=for-the-badge"></a>
+<a href="https://redirect.itskdhere.workers.dev/server/support/invite" title="Join Support Server"><img alt="Discord" src="https://img.shields.io/discord/917792741054894131?color=%235865F2&label=Chat&logo=discord&logoColor=%23FFFFFF&style=for-the-badge"></a>
 </p>
 
 ----
@@ -32,29 +32,50 @@ ChatGPT Discord BOT
 
 A Discord BOT Powered By [OpenAI](https://openai.com/)'s [ChatGPT](https://chat.openai.com).
 
-This BOT uses [ChatGPT-API v3](https://github.com/transitive-bullshit/chatgpt-api) , [Discord.JS v14](https://github.com/discordjs/discord.js) & [Puppeteer v19](https://github.com/puppeteer/puppeteer).
+This BOT uses [ChatGPT API](https://github.com/transitive-bullshit/chatgpt-api) & [FireBase](https://firebase.google.com/) [FireStore Database](https://firebase.google.com/docs/firestore)
 
 ## ✨Features 
  🔥 Use slash command `/ask` to ask questions in any channel.
  
- ✨ ChatGPT onProgress Typing Effect. Chalk, Figlet & Gradient-String for decoration.
+ 🔑 Direct Message (DM) the bot to get answer/response privately (switchable).
 
- 💥 This uses **puppeteer** to automate the login process. Auto Solve CAPTCHA.
+ 🧵 Continue Conversation in DM or using `/ask`
  
- 🔑 Uses Single ChatGPT Conversation Thread per Session.
- 
-<!--🔑 Directly DM the bot to get answer/response privately, Send `reset` to start a new thread.(Disabled)-->
+ 🔄 Use `/reset-chat` to Start a new Conversation Thread.
 
- ## 📡 Quick Start [Self-Hosting] 
-### Requirements:
+ 💥 Uses FireStore database for presistant chat storage & logs.
+
+ ✨ Chalk, Figlet & Gradient-String for decoration.
+
+ 💫 Easy Setup !
+ 
+## 🥏 Usage:
+
+ - `DM` - Ask Anything.
+
+ - `/ask` - Ask Anything.
+ 
+ - `/help` - Get Help.
+
+ - `/ping` - Check Websocket Heartbeat && Roundtrip Latency.
+
+ - `/reset-chat` - Start A Fresh Chat Session/Thread.
+
+
+## 📡 Quick Start [Self-Hosting] :
+### 0. Requirements:
  - [Git](https://git-scm.com/)
  - [Node.js v18](https://nodejs.org/)
- - [Google Chrome](https://www.google.com/chrome/)
  - [OpenAI Account](https://chat.openai.com/)
- - Atleast 1vCPU , 0.5GB RAM and 0.5GB Storage for the Bot.
+ - [Discord Account](https://discord.com/)
+ - [Google Account](https://accounts.google.com/) For [FireBase](https://firebase.google.com/)
+ - Atleast 1vCPU , 0.25GB RAM & 0.5GB Storage for the Bot.
 
-### Steps:
-0. Create **New Application** [BOT] from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with proper *Bot Permissions* and *Privileged Gateway Intents*.
+### 1. Bot Setup:
+0. Create **New Application** (BOT) from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with:<br>
+**Scopes:** `bot` & `application.commands` <br>
+**Bot Permissions:** `2734284602433` <br>
+**Privileged Gateway Intents:** `PRESENCE`, `SERVER MEMBERS`, `MESSAGE CONTENT` 
 
 1. `Star⭐` this Repo to get updates. 
 
@@ -72,26 +93,74 @@ cd ChatGPT-Discord-BOT
 npm install
 ```
 
-4. Rename the `.env.example` file to `.env` and fill the credentials properly. 
+4. To setup Environment Variables, Create a `.env` file in the root directory ***or*** Rename the `.env.example` file to `.env`. Then fill the credentials properly by following [this instruction]().
 
-5. Start the BOT: 
+5. Setup Firebase FireStore Database by following [this instruction]().
+
+6. Start the BOT: 
 ```bash
 npm run start
 ```
-- *or,* During development:
-```bash
-npm run dev
-```
-
-6. Complete the **CAPTCHA** Manually *or* [Use This Automation](https://github.com/transitive-bullshit/chatgpt-api/tree/v3#captchas).
 
 7. Use the BOT 🎉
 
+### 2. Environment Variables Setup:
 
-## ⛓Others
-##### 📝 License: [MIT](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/LICENSE)
-##### 🔋 ChatGPT API: [transitive-bullshit/chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api)
-##### 💡 Initial Inspiration:  [onury5506/Discord-ChatGPT-Bot](https://github.com/onury5506/Discord-ChatGPT-Bot)
+- `DISCORD_CLIENT_ID` - Client ID of the bot from *OAuth2* section.
+
+- `DISCORD_BOT_TOKEN` - Token of the bot from *Bot* section.
+
+- `DIRECT_MESSAGES` - true/false
+
+- `DM_WHITELIST_ID=[ "id_1" , "id_2" ]` - Set Discord user IDs of users only who can use bot from dm. You can add as many as you want in proper format.
+
+- `OPENAI_API_KEY` - Get OpenAI API Key from [here](https://platform.openai.com/account/api-keys).
+
+- `DISCORD_MAX_RESPONSE_LENGTH` - Max *2000* , recomended *1900*.
+
+- `API_ENDPOINT` - Set `default` for *api.openai.com* endpoint. But you can set 3rd party equivalent endpoint too.
+
+- `DEBUG` - true/false
+
+- `UWU` - true/false
+
+> See [.env.example](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/.env.example) file for more details
+
+### 3. Database Setup:
+
+ 0. Goto [console.firebase.google.com](https://console.firebase.google.com/) (Google Account Required)
+
+ 1. Click on `Create a project` or `Add project`. Give it a name and click `Continue`.
+
+ 2. Disable Google Analytics & Click `Create Project`.
+
+ 3. From the side-bar goto `Build` & then `Firestore Database`.
+
+ 4. Click `Create Database`.
+
+ 5. Select `Start in production mode` & click `Next`.
+
+ 6. Select a Firestore location nearest to your Server/VPS. This'll also set the Default GCP Resource Location & you can't change it later. <br> Then click `Enable`.
+
+ 7. Now goto `Project settings` & `Service accounts`.
+
+ 8. Under `Firebase Admin SDK` select `Node.js`. Then click `Generate new private key` and then click `Generate key`.
+
+ 9. **Important:** Rename the downloaded json file to `firebaseServiceAccountKey.json`. Any other name will not work here. Then put the json file in your bots directoty.
+
+> ✨ Tip: check out these images [here](https://github.com/itskdhere/ChatGPT-Discord-BOT/tree/main/img)
+
+## 💬 Support:
+
+- [Discord Server](https://redirect.itskdhere.workers.dev/server/support/invite)
+- [Create Issue](https://github.com/itskdhere/ChatGPT-Discord-BOT/issues/new)
+
+## ⛓ Others:
+#### 📝 License: [MIT](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/LICENSE)
+#### 🔋 ChatGPT API: [transitive-bullshit/chatgpt-api](https://github.com/transitive-bullshit/chatgpt-api)
+#### 📚 Database: [FireStore](https://firebase.google.com/docs/firestore)
+#### 🌐 BaaS: [FireBase](https://firebase.google.com/)
+#### ☁ IaaS: [Google Cloud Platform](https://cloud.google.com/)
 
 <br>
 <p align='center'>
