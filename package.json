@@ -25,7 +25,6 @@
     "gradient-string": "^2.0.2",
     "keyv": "^4.5.2",
     "keyv-firestore": "^1.1.1",
-    "node-fetch": "^3.2.6",
-    "openai": "^3.2.1"
+    "node-fetch": "^3.2.6"
   }
 }
