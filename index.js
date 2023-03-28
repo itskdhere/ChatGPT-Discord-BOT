@@ -26,6 +26,7 @@ const commands = [
   {
     name: 'ask',
     description: 'Ask Anything!',
+    dm_permission: false,
     options: [
       {
         name: "question",
@@ -180,7 +181,7 @@ async function main() {
 
     if (!process.env.DM_WHITELIST_ID.includes(message.author.id)) {
       await message.author.send("Ask Bot Owner To WhiteList Your ID 🙄");
-      await db.collection('dm-blacklisted-user-log').doc(message.author.id).set({
+      await db.collection('unauthorized-dm-log').doc(message.author.id).set({
         timeStamp: new Date(),
         userId: message.author.id,
         user: message.author.tag,
