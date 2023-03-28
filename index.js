@@ -216,7 +216,7 @@ async function main() {
         console.log("---------------End---------------");
         const timeStamp = new Date();
         const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
-        const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.setUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
+        const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.getUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
         await db.collection('dm-history').doc(message.author.id)
           .collection(date).doc(time).set({
             timeStamp: new Date(),
@@ -246,7 +246,7 @@ async function main() {
   async function reset_chat_Interaction_Handler(interaction) {
     const timeStamp = new Date();
     const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
-    const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.setUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
+    const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.getUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
     await interaction.reply('Checking...📚');
     const doc = await db.collection('users').doc(interaction.user.id).get();
     if (!doc.exists) {
@@ -298,7 +298,7 @@ async function main() {
         client.user.setActivity(activity);
         const timeStamp = new Date();
         const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
-        const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.setUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
+        const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.getUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
         await db.collection('chat-history').doc(interaction.user.id)
           .collection(date).doc(time).set({
             timeStamp: new Date(),
