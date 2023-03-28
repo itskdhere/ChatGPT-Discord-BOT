@@ -175,11 +175,25 @@ async function main() {
   // Direct Message Handler
   client.on("messageCreate", async message => {
     if (process.env.DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
+      await db.collection('dm-blacklisted-user-log').doc(interaction.user.id).set({
+        timeStamp: new Date(),
+        userId: interaction.user.id,
+        user: interaction.user.tag,
+        question: message.content,
+        bot: message.author.bot
+      });
       return;
     }
 
     if (!process.env.DM_WHITELIST_ID.includes(message.author.id)) {
       await message.author.send("Ask Bot Owner To WhiteList Your ID 🙄");
+      await db.collection('dm-blacklisted-user-log').doc(interaction.user.id).set({
+        timeStamp: new Date(),
+        userId: interaction.user.id,
+        user: interaction.user.tag,
+        question: message.content,
+        bot: message.author.bot
+      });
       return;
     }
 
@@ -208,8 +222,8 @@ async function main() {
         console.log("Response    : " + response.text);
         console.log("---------------End---------------");
         const timeStamp = new Date();
-        const date = timeStamp.getDate().toString();
-        const time = timeStamp.getTime().toString();
+        const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
+        const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.setUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
         await db.collection('dm-history').doc(interaction.user.id)
           .collection(date).doc(time).set({
             timeStamp: new Date(),
@@ -237,16 +251,34 @@ async function main() {
   }
 
   async function reset_chat_Interaction_Handler(interaction) {
+    const timeStamp = new Date();
+    const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
+    const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.setUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
     await interaction.reply('Checking...📚');
     const doc = await db.collection('users').doc(interaction.user.id).get();
     if (!doc.exists) {
       console.log('Failed: No Conversation Found ❌');
       await interaction.editReply('No Conversation Found ❌\nUse `/ask` To Start One\n</>');
+      await db.collection('reset-chat-log').doc(interaction.user.id)
+      .collection(date).doc(time).set({
+        timeStamp: new Date(),
+        userID: interaction.user.id,
+        user: interaction.user.tag,
+        resetChatSuccess: 0
+      });
     } else {
       await db.collection('users').doc(interaction.user.id).delete();
       console.log('Chat Reset: Successful ✅');
       await interaction.editReply('Chat Reset: Successful ✅\n</>');
+      await db.collection('reset-chat-log').doc(interaction.user.id)
+      .collection(date).doc(time).set({
+        timeStamp: new Date(),
+        userID: interaction.user.id,
+        user: interaction.user.tag,
+        resetChatSuccess: 1
+      });
     }
+
     client.user.setActivity(activity);
   }
 
@@ -272,8 +304,8 @@ async function main() {
         }
         client.user.setActivity(activity);
         const timeStamp = new Date();
-        const date = timeStamp.getDate().toString();
-        const time = timeStamp.getTime().toString();
+        const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
+        const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.setUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
         await db.collection('chat-history').doc(interaction.user.id)
           .collection(date).doc(time).set({
             timeStamp: new Date(),
