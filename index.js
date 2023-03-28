@@ -175,13 +175,6 @@ async function main() {
   // Direct Message Handler
   client.on("messageCreate", async message => {
     if (process.env.DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
-      await db.collection('dm-blacklisted-user-log').doc(message.author.id).set({
-        timeStamp: new Date(),
-        userId: message.author.id,
-        user: message.author.tag,
-        question: message.content,
-        bot: message.author.bot
-      });
       return;
     }
 
