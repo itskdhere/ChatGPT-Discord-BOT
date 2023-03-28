@@ -177,8 +177,8 @@ async function main() {
     if (process.env.DIRECT_MESSAGES !== "true" || message.channel.type != ChannelType.DM || message.author.bot) {
       await db.collection('dm-blacklisted-user-log').doc(interaction.user.id).set({
         timeStamp: new Date(),
-        userId: interaction.user.id,
-        user: interaction.user.tag,
+        userId: message.author.id,
+        user: message.author.tag,
         question: message.content,
         bot: message.author.bot
       });
@@ -189,8 +189,8 @@ async function main() {
       await message.author.send("Ask Bot Owner To WhiteList Your ID 🙄");
       await db.collection('dm-blacklisted-user-log').doc(interaction.user.id).set({
         timeStamp: new Date(),
-        userId: interaction.user.id,
-        user: interaction.user.tag,
+        userId: message.author.id,
+        user: message.author.tag,
         question: message.content,
         bot: message.author.bot
       });
@@ -227,8 +227,8 @@ async function main() {
         await db.collection('dm-history').doc(interaction.user.id)
           .collection(date).doc(time).set({
             timeStamp: new Date(),
-            userID: interaction.user.id,
-            user: interaction.user.tag,
+            userId: message.author.id,
+            user: message.author.tag,
             question: message.content,
             answer: response.text,
             parentMessageId: response.id
@@ -260,23 +260,23 @@ async function main() {
       console.log('Failed: No Conversation Found ❌');
       await interaction.editReply('No Conversation Found ❌\nUse `/ask` To Start One\n</>');
       await db.collection('reset-chat-log').doc(interaction.user.id)
-      .collection(date).doc(time).set({
-        timeStamp: new Date(),
-        userID: interaction.user.id,
-        user: interaction.user.tag,
-        resetChatSuccess: 0
-      });
+        .collection(date).doc(time).set({
+          timeStamp: new Date(),
+          userID: interaction.user.id,
+          user: interaction.user.tag,
+          resetChatSuccess: 0
+        });
     } else {
       await db.collection('users').doc(interaction.user.id).delete();
       console.log('Chat Reset: Successful ✅');
       await interaction.editReply('Chat Reset: Successful ✅\n</>');
       await db.collection('reset-chat-log').doc(interaction.user.id)
-      .collection(date).doc(time).set({
-        timeStamp: new Date(),
-        userID: interaction.user.id,
-        user: interaction.user.tag,
-        resetChatSuccess: 1
-      });
+        .collection(date).doc(time).set({
+          timeStamp: new Date(),
+          userID: interaction.user.id,
+          user: interaction.user.tag,
+          resetChatSuccess: 1
+        });
     }
 
     client.user.setActivity(activity);
