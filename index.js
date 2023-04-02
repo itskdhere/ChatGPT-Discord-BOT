@@ -181,13 +181,17 @@ async function main() {
 
     if (!process.env.DM_WHITELIST_ID.includes(message.author.id)) {
       await message.author.send("Ask Bot Owner To WhiteList Your ID 🙄");
-      await db.collection('unauthorized-dm-log').doc(message.author.id).set({
-        timeStamp: new Date(),
-        userId: message.author.id,
-        user: message.author.tag,
-        question: message.content,
-        bot: message.author.bot
-      });
+      const timeStamp = new Date();
+      const date = timeStamp.getUTCDate().toString() + '.' + timeStamp.getUTCMonth().toString() + '.' + timeStamp.getUTCFullYear().toString();
+      const time = timeStamp.getUTCHours().toString() + ':' + timeStamp.getUTCMinutes().toString() + ':' + timeStamp.getUTCSeconds().toString();
+      await db.collection('unauthorized-dm-log').doc(message.author.id)
+        .collection(date).doc(time).set({
+          timeStamp: new Date(),
+          userId: message.author.id,
+          user: message.author.tag,
+          question: message.content,
+          bot: message.author.bot
+        });
       return;
     }
 
