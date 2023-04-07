@@ -212,6 +212,9 @@ async function main() {
       }
 
       askQuestion(message.content, interaction, async (response) => {
+        if (!response.text)
+          await sentMessage.edit(`API Error ❌\nTry Again Later 😅\n</>`);
+
         if (response.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
           splitAndSendResponse(response.text, message.author)
         } else {
@@ -292,6 +295,9 @@ async function main() {
     try {
       await interaction.reply({ content: `Let Me Think 🤔` });
       askQuestion(question, interaction, async (content) => {
+        if (!content.text)
+          await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** API Error ❌\nTry Again Later 😅\n</>`);
+
         console.log("Response    : " + content.text);
         console.log("---------------End---------------");
         if (content.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
