@@ -332,7 +332,7 @@ async function main() {
         cb(response);
       }).catch((err) => {
         cb("Oppss, something went wrong! (Error)");
-        console.error(chalk.red("AskQuestion Error:" + err));
+        console.log(chalk.red("AskQuestion Error:" + err));
       })
     } else {
       api.sendMessage(question, {
@@ -346,7 +346,7 @@ async function main() {
         cb(response);
       }).catch((err) => {
         cb("Oppss, something went wrong! (Error)");
-        console.error(chalk.red("AskQuestion Error:" + err));
+        console.log(chalk.red("AskQuestion Error:" + err));
       });
     }
   }

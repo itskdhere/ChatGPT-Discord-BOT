@@ -93,7 +93,7 @@ cd ChatGPT-Discord-BOT
 npm install
 ```
 
-4. To setup Environment Variables, Create a `.env` file in the root directory ***or*** Rename the `.env.example` file to `.env`. Then fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#2-environment-variables-setup).
+4. To setup Environment Variables, Create a `.env` file in the root directory ***or*** Rename the `.env.example` file to `.env` <br> Then, fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#2-environment-variables-setup).
 
 5. Setup Firebase Firestore Database by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#3-database-setup).
 
@@ -136,25 +136,28 @@ npm run prod
 
 ### • Database Setup:
 
- 0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (Card Not Required)
+ 0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (No Card Required)
 
- 1. Click on `Create a project` or `Add project`. Give it a name and click `Continue`.
+ 1. Click on `Create a project` or `Add project`. Give it a name and click `Continue`
 
- 2. Disable Google Analytics & Click `Create Project`.
+ 2. Disable Google Analytics & Click `Create Project`
 
  3. From the side-bar goto `Build` & then `Firestore Database`.
 
- 4. Click `Create Database`.
+ 4. Click `Create Database`
 
- 5. Select `Start in production mode` & click `Next`.
+ 5. Select `Start in production mode` & click `Next`
 
- 6. Select a Firestore location nearest to your Server / VPS. This'll also set the Default GCP Resource Location & you can't change it later. <br> Then click `Enable`.
+ 6. Select a Firestore location nearest to your Server / VPS. This'll also set the Default GCP Resource Location & you can't change it later. <br> Then click `Enable`
 
  7. Now goto `Project settings` & `Service accounts`.
 
- 8. Under `Firebase Admin SDK` select `Node.js`. Then click `Generate new private key` and then click `Generate key`.
+ 8. Under `Firebase Admin SDK` select `Node.js`. Then click `Generate new private key` and then click `Generate key`
 
- 9. **Important:** Rename the downloaded json file to `firebaseServiceAccountKey.json` . Any other name will not work here. Then put the json file in your bots directory.
+ 9. **Important:** Rename the downloaded json file to `firebaseServiceAccountKey.json` <br> Any other name will not work here. Then put the json file in your bots directory. <br>Copy FileName:
+ ```bash
+ firebaseServiceAccountKey.json
+ ```
 
 > ✨ Tip: check out these images [here](https://github.com/itskdhere/ChatGPT-Discord-BOT/tree/main/img)
 
