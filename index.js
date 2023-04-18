@@ -331,6 +331,7 @@ async function main() {
     if (!doc.exists) {
       api.sendMessage(question).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
+          timeStamp: new Date(),
           userId: interaction.user.id,
           user: interaction.user.tag,
           parentMessageId: response.id
@@ -345,6 +346,7 @@ async function main() {
         parentMessageId: doc.data().parentMessageId
       }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
+          timeStamp: new Date(),
           userId: interaction.user.id,
           user: interaction.user.tag,
           parentMessageId: response.id

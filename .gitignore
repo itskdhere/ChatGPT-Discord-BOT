@@ -2,6 +2,10 @@
 tmp/
 temp/
 firebaseServiceAccountKey.json
+node_modules.zip
+
+# JetBrains WebStorm
+.idea/
 
 # Replit
 .replit
