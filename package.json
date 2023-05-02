@@ -1,7 +1,7 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "3.0.0",
-  "description": "A Discord BOT Powered By OpenAI's ChatGPT",
+  "version": "3.1.0",
+  "description": "A Chat Synced Discord Bot using OpenAI ChatGPT API & Firestore Database 🚀",
   "author": "itskdhere",
   "license": "MIT",
   "private": "true",
