@@ -218,6 +218,7 @@ async function main() {
           } else {
             await sentMessage.edit(`API Error ❌\n\`\`\`\n${response}\n\`\`\`\n</>`)
           }
+          return;
         }
 
         if (response.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
@@ -307,6 +308,7 @@ async function main() {
           } else {
             await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** API Error ❌\n\`\`\`\n${content}\n\`\`\`\n</>`);
           }
+          return;
         }
 
         console.log("Response    : " + content.text);
