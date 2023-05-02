@@ -348,10 +348,12 @@ async function main() {
 
   async function askQuestion(question, interaction, cb) {
     const doc = await db.collection('users').doc(interaction.user.id).get();
+    currentDate = new Date().toISOString();
+    const systemMessage = process.env.SYSTEM_MESSAGE + `and Current Date is ${currentDate}. My name is ${client.user.username}`
 
     if (!doc.exists) {
       api.sendMessage(question, {
-        systemMessage: process.env.SYSTEM_MESSAGE
+        systemMessage: systemMessage
       }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           timeStamp: new Date(),
@@ -367,7 +369,7 @@ async function main() {
     } else {
       api.sendMessage(question, {
         parentMessageId: doc.data().parentMessageId,
-        systemMessage: process.env.SYSTEM_MESSAGE
+        systemMessage: systemMessage
       }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           timeStamp: new Date(),
