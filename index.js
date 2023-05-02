@@ -55,7 +55,11 @@ async function initOpenAI(messageStore) {
   if (process.env.API_ENDPOINT.toLocaleLowerCase() === 'default') {
     const api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
+      completionParams: {
+        model: process.env.MODEL,
+      },
       messageStore,
+      systemMessages: process.env.SYSTEM_MESSAGES,
       debug: process.env.DEBUG
     });
     return api;
@@ -63,7 +67,11 @@ async function initOpenAI(messageStore) {
     const api = new ChatGPTAPI({
       apiKey: process.env.OPENAI_API_KEY,
       apiBaseUrl: process.env.API_ENDPOINT.toLocaleLowerCase(),
+      completionParams: {
+        model: process.env.MODEL,
+      },
       messageStore,
+      systemMessages: process.env.SYSTEM_MESSAGES,
       debug: process.env.DEBUG
     });
     return api;
