@@ -349,7 +349,7 @@ async function main() {
   async function askQuestion(question, interaction, cb) {
     const doc = await db.collection('users').doc(interaction.user.id).get();
     const currentDate = new Date().toISOString();
-    const systemMessage = process.env.SYSTEM_MESSAGE + `and Current Date is ${currentDate}. My name is ${client.user.username}`
+    const systemMessage = process.env.SYSTEM_MESSAGE + `and Current Date is ${currentDate}. My name is ${interaction.user.username}`
 
     if (!doc.exists) {
       api.sendMessage(question, {
