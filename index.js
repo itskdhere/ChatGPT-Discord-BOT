@@ -212,8 +212,13 @@ async function main() {
       }
 
       askQuestion(message.content, interaction, async (response) => {
-        if (!response.text)
-          await sentMessage.edit(`API Error ❌\nTry Again Later 😅\n</>`);
+        if (!response.text) {
+          if (response.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
+            splitAndSendResponse(response, message.author)
+          } else {
+            await sentMessage.edit(`API Error ❌\n\`\`\`\n${response}\n\`\`\`\n</>`)
+          }
+        }
 
         if (response.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
           splitAndSendResponse(response.text, message.author)
@@ -247,7 +252,7 @@ async function main() {
   }
 
   async function help_Interaction_Handler(interaction) {
-    await interaction.reply("**ChatGPT Discord Bot**\nA Discord Bot Powered By OpenAI's ChatGPT !\n\n**Usage:**\n`/ask` - Ask Anything\n`/reset-chat` - Start A Fresh Chat Session\n`/ping` - Check Websocket Heartbeat && Roundtrip Latency\n\nSupport Server: https://dsc.gg/skdm\nSource Code: https://github.com/itskdhere/ChatGPT-Discord-BOT\n</>");
+    await interaction.reply("**ChatGPT Discord Bot**\nA Discord Bot Powered By OpenAI's ChatGPT !\n\n**Usage:**\nDM - Ask Anything\n`/ask` - Ask Anything\n`/reset-chat` - Start A Fresh Chat Session\n`/ping` - Check Websocket Heartbeat && Roundtrip Latency\n\nSource Code: <https://github.com/itskdhere/ChatGPT-Discord-BOT>\nSupport Server: https://dsc.gg/skdm");
     client.user.setActivity(activity);
   }
 
@@ -295,11 +300,18 @@ async function main() {
     try {
       await interaction.reply({ content: `Let Me Think 🤔` });
       askQuestion(question, interaction, async (content) => {
-        if (!content.text)
-          await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** API Error ❌\nTry Again Later 😅\n</>`);
+        if (!content.text) {
+          if (content.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
+            await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** API Error ❌\nCheck DM For Error Log ❗\n</>`);
+            splitAndSendResponse(content, interaction.user);
+          } else {
+            await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** API Error ❌\n\`\`\`\n${content}\n\`\`\`\n</>`);
+          }
+        }
 
         console.log("Response    : " + content.text);
         console.log("---------------End---------------");
+
         if (content.text.length >= process.env.DISCORD_MAX_RESPONSE_LENGTH) {
           await interaction.editReply({ content: "The Answer Is Too Powerful 🤯,\nCheck Your DM 😅" });
           splitAndSendResponse(content.text, interaction.user);
@@ -338,7 +350,7 @@ async function main() {
         });
         cb(response);
       }).catch((err) => {
-        cb("Oppss, something went wrong! (Error)");
+        cb(err);
         console.log(chalk.red("AskQuestion Error:" + err));
       })
     } else {
@@ -353,7 +365,7 @@ async function main() {
         });
         cb(response);
       }).catch((err) => {
-        cb("Oppss, something went wrong! (Error)");
+        cb(err);
         console.log(chalk.red("AskQuestion Error:" + err));
       });
     }
