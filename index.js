@@ -308,6 +308,7 @@ async function main() {
           } else {
             await interaction.editReply(`**${interaction.user.tag}:** ${question}\n**${client.user.username}:** API Error ❌\n\`\`\`\n${content}\n\`\`\`\n</>`);
           }
+          client.user.setActivity(activity);
           return;
         }
 
