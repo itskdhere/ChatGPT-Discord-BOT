@@ -1,6 +1,5 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
-import { format } from 'util';
 import { ChatGPTAPI } from 'chatgpt';
 import axios from 'axios';
 import chalk from 'chalk';
