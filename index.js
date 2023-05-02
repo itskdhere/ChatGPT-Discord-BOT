@@ -59,7 +59,6 @@ async function initOpenAI(messageStore) {
         model: process.env.MODEL,
       },
       messageStore,
-      systemMessage: process.env.SYSTEM_MESSAGE,
       debug: process.env.DEBUG
     });
     return api;
@@ -71,7 +70,6 @@ async function initOpenAI(messageStore) {
         model: process.env.MODEL,
       },
       messageStore,
-      systemMessage: process.env.SYSTEM_MESSAGE,
       debug: process.env.DEBUG
     });
     return api;
@@ -352,7 +350,9 @@ async function main() {
     const doc = await db.collection('users').doc(interaction.user.id).get();
 
     if (!doc.exists) {
-      api.sendMessage(question).then((response) => {
+      api.sendMessage(question, {
+        systemMessage: process.env.SYSTEM_MESSAGE
+      }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           timeStamp: new Date(),
           userId: interaction.user.id,
@@ -366,7 +366,8 @@ async function main() {
       })
     } else {
       api.sendMessage(question, {
-        parentMessageId: doc.data().parentMessageId
+        parentMessageId: doc.data().parentMessageId,
+        systemMessage: process.env.SYSTEM_MESSAGE
       }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           timeStamp: new Date(),
