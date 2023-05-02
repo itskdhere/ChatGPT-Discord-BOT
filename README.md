@@ -1,4 +1,3 @@
-
 <h1 align="center">
 ChatGPT Discord BOT
 </h1>

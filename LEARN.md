@@ -1,4 +1,3 @@
-
 <h1 align="center">
 ChatGPT Discord BOT
 </h1>
@@ -72,12 +71,16 @@ This BOT uses [ChatGPT API](https://github.com/transitive-bullshit/chatgpt-api) 
  - Atleast 1vCPU , 0.25GB RAM & 0.5GB Storage for the Bot.
 
 ### 1. Bot Setup:
-0. Create **New Application** (BOT) from [Discord Developer Portal](https://discord.com/developers/applications) and add this to your Discord Server with:<br>
+0. Create **New Application** (BOT) from [Discord Developer Portal](https://discord.com/developers/applications) and invite that bot to your Discord Server with:<br>
 **Scopes:** `bot` & `application.commands` <br>
 **Bot Permissions:** `2734284602433` <br>
-**Privileged Gateway Intents:** `PRESENCE`, `SERVER MEMBERS`, `MESSAGE CONTENT` 
+**Privileged Gateway Intents:** `PRESENCE`, `SERVER MEMBERS`, `MESSAGE CONTENT` <br>
+- **Example Bot Invite URL** (Replace `BOT_CLIENT_ID` with your bot's Client ID) **:**
+```
+https://discord.com/api/oauth2/authorize?client_id=BOT_CLIENT_ID&permissions=2734284602433&scope=bot%20applications.commands
+```
 
-1. `Star⭐` this Repo to get updates. 
+1. `⭐Star` this Repo to get updates. 
 
 2. Clone this repo:
 ```bash
@@ -93,9 +96,9 @@ cd ChatGPT-Discord-BOT
 npm install
 ```
 
-4. To setup Environment Variables, Create a `.env` file in the root directory ***or*** Rename the `.env.example` file to `.env`. Then fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#2-environment-variables-setup).
+4. To setup Environment Variables, Copy & Rename the `.env.example` file to `.env` <br> Then, fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-environment-variables-setup).
 
-5. Setup Firebase Firestore Database by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#3-database-setup).
+5. Setup Firebase Firestore Database by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-database-setup).
 
 6. Start the BOT: 
 ```bash
@@ -118,43 +121,52 @@ npm run prod
 
 - `DISCORD_BOT_TOKEN` - Token of the bot from *Bot* section.
 
-- `DIRECT_MESSAGES` - true/false
+- `DIRECT_MESSAGES` -  Toggle Direct Messages. **Values:** `true` or `false`
 
 - `DM_WHITELIST_ID=[ "id_1" , "id_2" ]` - Set Discord user IDs of users only who can use bot from dm. You can add as many as you want in proper format.
 
 - `OPENAI_API_KEY` - Get OpenAI API Key from [here](https://platform.openai.com/account/api-keys).
 
+#### **• Advanced Settings:**
+
 - `DISCORD_MAX_RESPONSE_LENGTH` - Max *2000* , recomended *1900*.
 
 - `API_ENDPOINT` - Set `default` for *api.openai.com* endpoint. But you can set 3rd party equivalent endpoint too.
 
-- `DEBUG` - true/false
+- `DEBUG` - Toggle Debug Messages. **Values:** `true` or `false`
 
-- `UWU` - true/false
+- `UWU` - Toggle Figlet & Gradient-String decoration. **Values:** `true` or `false`
+
+- `MODEL` - Name of the Model you want to use. Like, `text-davinci-003` , `gpt-3.5-turbo` , `gpt-4` etc.
+
+- `SYSTEM_MESSAGE` - This is the Initial Prompt that is sent to the Model. You can change it to anything you want to change the bot's behaviour as your requirements. Knowledge Cutoff and Current Date is always sent.
 
 > See [.env.example](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/.env.example) file for more details
 
 ### • Database Setup:
 
- 0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (Card Not Required)
+ 0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (No Card Required)
 
- 1. Click on `Create a project` or `Add project`. Give it a name and click `Continue`.
+ 1. Click on `Create a project` or `Add project`. Give it a name and click `Continue`
 
- 2. Disable Google Analytics & Click `Create Project`.
+ 2. Disable Google Analytics & Click `Create Project`
 
  3. From the side-bar goto `Build` & then `Firestore Database`.
 
- 4. Click `Create Database`.
+ 4. Click `Create Database`
 
- 5. Select `Start in production mode` & click `Next`.
+ 5. Select `Start in production mode` & click `Next`
 
- 6. Select a Firestore location nearest to your Server / VPS. This'll also set the Default GCP Resource Location & you can't change it later. <br> Then click `Enable`.
+ 6. Select a Firestore location nearest to your Server / VPS. This'll also set the Default GCP Resource Location & you can't change it later. <br> Then click `Enable`
 
  7. Now goto `Project settings` & `Service accounts`.
 
- 8. Under `Firebase Admin SDK` select `Node.js`. Then click `Generate new private key` and then click `Generate key`.
+ 8. Under `Firebase Admin SDK` select `Node.js`. Then click `Generate new private key` and then click `Generate key`
 
- 9. **Important:** Rename the downloaded json file to `firebaseServiceAccountKey.json` . Any other name will not work here. Then put the json file in your bots directory.
+ 9. **Important:** Rename the downloaded json file to `firebaseServiceAccountKey.json` <br> Any other name will not work here. Then put the json file in your bots directory. <br>Copy FileName:
+ ```bash
+ firebaseServiceAccountKey.json
+ ```
 
 > ✨ Tip: check out these images [here](https://github.com/itskdhere/ChatGPT-Discord-BOT/tree/main/img)
 
