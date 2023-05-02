@@ -59,7 +59,7 @@ async function initOpenAI(messageStore) {
         model: process.env.MODEL,
       },
       messageStore,
-      systemMessages: process.env.SYSTEM_MESSAGES,
+      systemMessage: process.env.SYSTEM_MESSAGE,
       debug: process.env.DEBUG
     });
     return api;
@@ -71,7 +71,7 @@ async function initOpenAI(messageStore) {
         model: process.env.MODEL,
       },
       messageStore,
-      systemMessages: process.env.SYSTEM_MESSAGES,
+      systemMessage: process.env.SYSTEM_MESSAGE,
       debug: process.env.DEBUG
     });
     return api;
