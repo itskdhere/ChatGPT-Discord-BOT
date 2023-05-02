@@ -1,5 +1,6 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
+import { format } from 'util';
 import { ChatGPTAPI } from 'chatgpt';
 import axios from 'axios';
 import chalk from 'chalk';
@@ -349,11 +350,11 @@ async function main() {
   async function askQuestion(question, interaction, cb) {
     const doc = await db.collection('users').doc(interaction.user.id).get();
     const currentDate = new Date().toISOString();
-    const systemMessage = process.env.SYSTEM_MESSAGE + `and Current Date is ${currentDate}. My name is ${interaction.user.username}`
+    const finalSystemMessage = process.env.SYSTEM_MESSAGE + ` My name is ${interaction.user.username}. Your Knowledge cutoff is 2021-09-01 and Current Date is ${currentDate}.`
 
     if (!doc.exists) {
       api.sendMessage(question, {
-        systemMessage: systemMessage
+        systemMessage: finalSystemMessage
       }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           timeStamp: new Date(),
@@ -369,7 +370,7 @@ async function main() {
     } else {
       api.sendMessage(question, {
         parentMessageId: doc.data().parentMessageId,
-        systemMessage: systemMessage
+        systemMessage: finalSystemMessage
       }).then((response) => {
         db.collection('users').doc(interaction.user.id).set({
           timeStamp: new Date(),
