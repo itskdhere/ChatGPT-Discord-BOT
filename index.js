@@ -350,7 +350,7 @@ async function main() {
   async function askQuestion(question, interaction, cb) {
     const doc = await db.collection('users').doc(interaction.user.id).get();
     const currentDate = new Date().toISOString();
-    const finalSystemMessage = process.env.SYSTEM_MESSAGE + ` My name is ${interaction.user.username}. Your Knowledge cutoff is 2021-09-01 and Current Date is ${currentDate}.`
+    const finalSystemMessage = process.env.SYSTEM_MESSAGE + ` Your Knowledge cutoff is 2021-09-01 and Current Date is ${currentDate}.`
 
     if (!doc.exists) {
       api.sendMessage(question, {
