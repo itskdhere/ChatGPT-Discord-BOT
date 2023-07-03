@@ -1,12 +1,13 @@
 // Imports
 import dotenv from 'dotenv'; dotenv.config();
 import { ChatGPTAPI } from 'chatgpt';
+import Keyv from 'keyv';
+import http from 'http';
 import axios from 'axios';
 import chalk from 'chalk';
 import figlet from 'figlet';
 import gradient from 'gradient-string';
 import admin from 'firebase-admin';
-import Keyv from 'keyv';
 import KeyvFirestore from 'keyv-firestore';
 import {
   Client, REST, Partials,
@@ -392,6 +393,11 @@ async function main() {
       resp = resp.slice(end, resp.length)
     }
   }
+}
+
+// HTTP Server
+if (process.env.HTTP_SERVER) {
+  http.createServer((req, res) => res.end('BOT Is Up && Running..!!')).listen(process.env.PORT);
 }
 
 // Discord Rate Limit Check
