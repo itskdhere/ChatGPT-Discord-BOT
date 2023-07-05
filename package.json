@@ -24,7 +24,7 @@
     "firebase-admin": "^11.7.0",
     "gradient-string": "^2.0.2",
     "keyv": "^4.5.2",
-    "keyv-firestore": "^1.1.1",
+    "keyv-firestore": "^2.0.0",
     "node-fetch": "^3.3.1"
   }
 }
