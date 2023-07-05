@@ -96,7 +96,14 @@ cd ChatGPT-Discord-BOT
 npm install
 ```
 
-4. To setup Environment Variables, Copy & Rename the `.env.example` file to `.env` <br> Then, fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-environment-variables-setup).
+4. To setup Environment Variables, Copy & Rename the `.env.example` file to `.env`
+```bash
+cp .env.example .env
+```
+```bash
+nano .env
+```
+Then, fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-environment-variables-setup).
 
 5. Setup Firebase Firestore Database by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-database-setup).
 
@@ -108,14 +115,20 @@ npm run start
 ```bash
 npm run dev
 ```
-*Or,* In Production:
+*Or,* In Production with [PM2](https://pm2.keymetrics.io/docs/usage/quick-start):
+```bash
+npm install pm2 -g
+```
 ```bash
 npm run prod
 ```
 
 7. Use the BOT 🎉
 
-### • Environment Variables Setup:
+
+<h3>• Environment Variables Setup:</h3>
+<details>
+<summary><b>(expand/collapse)</b></summary>
 
 - `DISCORD_CLIENT_ID` - Client ID of the bot from *OAuth2* section.
 
@@ -126,6 +139,9 @@ npm run prod
 - `DM_WHITELIST_ID=[ "id_1" , "id_2" ]` - Set Discord user IDs of users only who can use bot from dm. You can add as many as you want in proper format.
 
 - `OPENAI_API_KEY` - Get OpenAI API Key from [here](https://platform.openai.com/account/api-keys).
+
+- `HTTP_SERVER` - HTTP Server (Optional). Values: `true` or `false`
+- `PORT` - Port for HTTP Server. Default: `7860`. If you change the port, make sure to change it in the [Dockerfile](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/Dockerfile) as well.
 
 #### **• Advanced Settings:**
 
@@ -143,7 +159,11 @@ npm run prod
 
 > See [.env.example](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/.env.example) file for more details
 
-### • Database Setup:
+</details>
+
+<h3>• Database Setup:</h3>
+<details>
+<summary><b>(expand/collapse)</b></summary>
 
  0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (No Card Required)
 
@@ -169,6 +189,9 @@ npm run prod
  ```
 
 > ✨ Tip: check out these images [here](https://github.com/itskdhere/ChatGPT-Discord-BOT/tree/main/img)
+
+</details>
+
 
 ## 💬 Support:
 
