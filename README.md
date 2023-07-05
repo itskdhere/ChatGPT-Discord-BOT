@@ -108,7 +108,10 @@ npm run start
 ```bash
 npm run dev
 ```
-*Or,* In Production:
+*Or,* In Production with [PM2](https://pm2.keymetrics.io/docs/usage/quick-start):
+```bash
+npm install pm2 -g
+```
 ```bash
 npm run prod
 ```
