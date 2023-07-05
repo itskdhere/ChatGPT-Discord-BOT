@@ -11,7 +11,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "prod": "npm i pm2 -g && pm2 start index.js -n chatgpt-bot"
+    "prod": "pm2 start index.js -n chatgpt-bot"
   },
   "dependencies": {
     "@types/node": "^18.16.3",
