@@ -6,7 +6,7 @@ These versions of the project are currently being supported with feature & secur
 | Version | Supported          |
 | ------- | ------------------ |
 | 3.x.x   | :white_check_mark: |
-| 2.5.x   | :white_check_mark: |
+| 2.5.x   | :x:                |
 | < 2.5.0 | :x:                |
 
 ## Reporting a Vulnerability
