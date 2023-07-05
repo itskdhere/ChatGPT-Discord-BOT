@@ -2,6 +2,10 @@
 ChatGPT Discord BOT
 </h1>
 
+<h3 align="center">
+<b>v3.2.0</b>
+</h3>
+
 <p align="center">
 <img src="img/ChatGPT.svg">
 </p>
