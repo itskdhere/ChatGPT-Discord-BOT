@@ -125,8 +125,10 @@ npm run prod
 
 7. Use the BOT 🎉
 
+
+<h3>• Environment Variables Setup:</h3>
 <details>
-<summary><b>Environment Variables Setup:</b></summary>
+<summary><b>(expand/collapse)</b></summary>
 
 - `DISCORD_CLIENT_ID` - Client ID of the bot from *OAuth2* section.
 
@@ -159,8 +161,9 @@ npm run prod
 
 </details>
 
+<h3>• Database Setup:</h3>
 <details>
-<summary><b>Database Setup:</b></summary>
+<summary><b>(expand/collapse)</b></summary>
 
  0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (No Card Required)
 
