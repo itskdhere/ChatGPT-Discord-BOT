@@ -3,7 +3,7 @@ ChatGPT Discord BOT
 </h1>
 
 <h3 align="center">
-<b>v3.2.1</b>
+<b>v3.2.2</b>
 </h3>
 
 <p align="center">
@@ -66,15 +66,15 @@ This BOT uses [ChatGPT API](https://github.com/transitive-bullshit/chatgpt-api) 
 
 
 ## 📡 Quick Start [Self-Hosting] :
-### 0. Requirements:
+### Requirements:
  - [Git](https://git-scm.com/)
- - [Node.js v18](https://nodejs.org/)
+ - [Node.js v18](https://nodejs.org/) or, [Docker](https://www.docker.com/)
  - [OpenAI Account](https://chat.openai.com/)
  - [Discord Account](https://discord.com/)
  - [Google Account](https://accounts.google.com/) For [Firebase](https://firebase.google.com/)
- - Atleast 1vCPU , 0.25GB RAM & 0.5GB Storage for the Bot.
+ - Atleast 1vCPU , 0.5GB RAM & 1GB Storage for the Bot.
 
-### 1. Bot Setup:
+### Setting Up The Bot:
 0. Create **New Application** (BOT) from [Discord Developer Portal](https://discord.com/developers/applications) and invite that bot to your Discord Server with:<br>
 **Scopes:** `bot` & `application.commands` <br>
 **Bot Permissions:** `2734284602433` <br>
@@ -95,44 +95,10 @@ Then navigate to the folder:
 cd ChatGPT-Discord-BOT
 ```
 
-3. Install all dependencies: 
-```bash
-npm install
-```
+3. To setup Environment Variables, Copy & Rename the `.env.example` file to `.env` and open in any Text Editor. Then, fill the credentials properly by following this instruction:
 
-4. To setup Environment Variables, Copy & Rename the `.env.example` file to `.env`
-```bash
-cp .env.example .env
-```
-```bash
-nano .env
-```
-Then, fill the credentials properly by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-environment-variables-setup).
-
-5. Setup Firebase Firestore Database by following [this instruction](https://github.com/itskdhere/ChatGPT-Discord-BOT#-database-setup).
-
-6. Start the BOT: 
-```bash
-npm run start
-```
-*Or,* During Development:
-```bash
-npm run dev
-```
-*Or,* In Production with [PM2](https://pm2.keymetrics.io/docs/usage/quick-start):
-```bash
-npm install pm2 -g
-```
-```bash
-npm run prod
-```
-
-7. Use the BOT 🎉
-
-
-<h3>• Environment Variables Setup:</h3>
 <details>
-<summary><b>(expand/collapse)</b></summary>
+<summary><b>Expand / Collapse Instruction</b></summary>
 
 - `DISCORD_CLIENT_ID` - Client ID of the bot from *OAuth2* section.
 
@@ -165,9 +131,12 @@ npm run prod
 
 </details>
 
-<h3>• Database Setup:</h3>
+<br>
+
+4. Setup Firebase Firestore Database by following this instruction:
+
 <details>
-<summary><b>(expand/collapse)</b></summary>
+<summary><b>Expand / Collapse Instruction</b></summary>
 
  0. Goto **Firebase Console:** [console.firebase.google.com](https://console.firebase.google.com/) (No Card Required)
 
@@ -196,6 +165,39 @@ npm run prod
 
 </details>
 
+### Running The Bot:
+
+#### **🐳 Using Docker:**
+
+```bash
+docker build -t itskdhere/chatgpt:3.2.2 .
+```
+```bash
+docker run --name chatgpt -d itskdhere/chatgpt:3.2.2
+```
+
+#### **🟢 Without Docker:**
+
+1. Install all dependencies: 
+```bash
+npm install
+```
+
+2. Start the BOT: 
+```bash
+npm run start
+```
+*Or,* During Development:
+```bash
+npm run dev
+```
+*Or,* In Production with [PM2](https://pm2.keymetrics.io/docs/usage/quick-start):
+```bash
+npm install pm2 -g
+```
+```bash
+npm run prod
+```
 
 ## 💬 Support:
 
