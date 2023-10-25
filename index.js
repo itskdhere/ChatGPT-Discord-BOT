@@ -396,7 +396,7 @@ async function main() {
 }
 
 // HTTP Server
-if (process.env.HTTP_SERVER == true) {
+if (process.env.HTTP_SERVER === 'true') {
   http.createServer((req, res) => res.end('BOT Is Up && Running..!!')).listen(process.env.PORT);
 }
 
