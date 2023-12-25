@@ -3,7 +3,7 @@ ChatGPT Discord BOT
 </h1>
 
 <h3 align="center">
-<b>v3.2.3</b>
+<b>v3.2.4</b>
 </h3>
 
 <p align="center">
@@ -170,10 +170,10 @@ cd ChatGPT-Discord-BOT
 #### **🐳 Using Docker:**
 
 ```bash
-docker build -t itskdhere/chatgpt:3.2.3 .
+docker build -t itskdhere/chatgpt:3.2.4 .
 ```
 ```bash
-docker run -d -p 7860:7860 --name chatgpt itskdhere/chatgpt:3.2.3
+docker run -d -p 7860:7860 --name chatgpt itskdhere/chatgpt:3.2.4
 ```
 
 #### **🟢 Without Docker:**

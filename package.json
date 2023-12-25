@@ -1,6 +1,6 @@
 {
   "name": "chatgpt-discord-bot",
-  "version": "3.2.3",
+  "version": "3.2.4",
   "description": "A Chat Synced Discord Bot using OpenAI ChatGPT API & Firestore Database 🚀",
   "author": "itskdhere",
   "license": "MIT",
@@ -14,13 +14,13 @@
     "prod": "pm2 start index.js -n chatgpt-bot"
   },
   "dependencies": {
-    "axios": "^1.6.0",
+    "axios": "^1.6.2",
     "chalk": "^5.3.0",
     "chatgpt": "^5.2.5",
     "discord.js": "^14.14.1",
     "dotenv": "^16.3.1",
-    "figlet": "^1.6.0",
-    "firebase-admin": "^11.11.0",
+    "figlet": "^1.7.0",
+    "firebase-admin": "^11.11.1",
     "gradient-string": "^2.0.2",
     "keyv": "^4.5.4",
     "keyv-firestore": "^2.0.0"
