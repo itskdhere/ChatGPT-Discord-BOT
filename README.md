@@ -68,7 +68,7 @@ This BOT uses [ChatGPT API](https://github.com/transitive-bullshit/chatgpt-api) 
 ## 📡 Quick Start [Self-Hosting] :
 ### Requirements:
  - [Git](https://git-scm.com/)
- - [Node.js v18](https://nodejs.org/) or, [Docker](https://www.docker.com/)
+ - [Node.js v20](https://nodejs.org/) or, [Docker](https://www.docker.com/)
  - [OpenAI Account](https://chat.openai.com/)
  - [Discord Account](https://discord.com/)
  - [Google Account](https://accounts.google.com/) For [Firebase](https://firebase.google.com/)
