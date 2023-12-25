@@ -17,10 +17,10 @@ import {
   from 'discord.js';
 
 // Import Firebase Admin SDK Service Account Private Key
-import firebaseServiceAccount from './firebaseServiceAccountKey.json' assert {type: 'json'}
+import firebaseServiceAccount from './firebaseServiceAccountKey.json' assert {type: 'json'};
 
 // Defines
-const activity = '/ask && /help'
+const activity = '/ask && /help';
 
 // Discord Slash Commands Defines
 const commands = [
@@ -50,6 +50,19 @@ const commands = [
     description: 'Get Help'
   }
 ];
+
+// Initialize Discord Client
+const client = new Client({
+  intents: [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildIntegrations,
+    GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.DirectMessageTyping,
+    GatewayIntentBits.MessageContent,
+  ],
+  partials: [Partials.Channel]
+});
 
 // Initialize OpenAI Session
 async function initOpenAI(messageStore) {
@@ -91,6 +104,7 @@ async function initDiscordCommands() {
   }
 }
 
+// Initialize Firebase Admin SDK
 async function initFirebaseAdmin() {
   admin.initializeApp({
     credential: admin.credential.cert(firebaseServiceAccount),
@@ -100,6 +114,7 @@ async function initFirebaseAdmin() {
   return db;
 }
 
+// Initialize Keyv Firestore
 async function initKeyvFirestore() {
   const messageStore = new Keyv({
     store: new KeyvFirestore({
@@ -111,7 +126,7 @@ async function initKeyvFirestore() {
   return messageStore;
 }
 
-// Main Function (Execution Starts From Here)
+// Main Function
 async function main() {
   if (process.env.UWU === 'true') {
     console.log(gradient.pastel.multiline(figlet.textSync('ChatGPT', {
@@ -133,20 +148,6 @@ async function main() {
   });
 
   await initDiscordCommands().catch(e => { console.log(e) });
-
-  const client = new Client({
-    intents: [
-      GatewayIntentBits.Guilds,
-      GatewayIntentBits.GuildMessages,
-      GatewayIntentBits.GuildIntegrations,
-      GatewayIntentBits.DirectMessages,
-      GatewayIntentBits.DirectMessageTyping,
-      GatewayIntentBits.MessageContent,
-    ],
-    partials: [Partials.Channel]
-  });
-
-  client.login(process.env.DISCORD_BOT_TOKEN).catch(e => console.log(chalk.red(e)));
 
   client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}`);
@@ -251,7 +252,7 @@ async function main() {
     } catch (e) {
       console.error(e)
     }
-  })
+  });
 
   async function ping_Interaction_Handler(interaction) {
     const sent = await interaction.reply({ content: 'Pinging...🌐', fetchReply: true });
@@ -347,6 +348,10 @@ async function main() {
     }
   }
 
+  client
+    .login(process.env.DISCORD_BOT_TOKEN)
+    .catch(e => console.log(chalk.red(e)));
+
   async function askQuestion(question, interaction, cb) {
     const doc = await db.collection('users').doc(interaction.user.id).get();
     const currentDate = new Date().toISOString();
@@ -402,6 +407,8 @@ if (process.env.HTTP_SERVER === 'true') {
 
 // Discord Rate Limit Check
 setInterval(() => {
+  client.user.setActivity(activity);
+
   axios
     .get('https://discord.com/api/v10')
     .catch(error => {
@@ -413,8 +420,6 @@ setInterval(() => {
       }
     });
 
-}, 30000); // Check Every 30 Second
+}, 30 * 1000); // Check Every 30 Second
 
 main() // Call Main function
-
-// ---EoC---
