@@ -111,7 +111,7 @@ cd ChatGPT-Discord-BOT
 - `OPENAI_API_KEY` - Get OpenAI API Key from [here](https://platform.openai.com/account/api-keys).
 
 - `HTTP_SERVER` - HTTP Server (Optional). Values: `true` or `false`
-- `PORT` - Port for HTTP Server. Default: `7860`. If you change the port, make sure to change it in the [Dockerfile](https://github.com/itskdhere/ChatGPT-Discord-BOT/blob/main/Dockerfile) as well.
+- `PORT` - Port for HTTP Server. Default: `7860`.
 
 #### **• Advanced Settings:**
 
@@ -173,7 +173,16 @@ cd ChatGPT-Discord-BOT
 docker build -t itskdhere/chatgpt:3.2.4 .
 ```
 ```bash
-docker run -d -p 7860:7860 --name chatgpt itskdhere/chatgpt:3.2.4
+docker run -d -p 7860:7860 --env-file .env -v ./firebaseServiceAccountKey.json:/app/firebaseServiceAccountKey.json --name chatgpt itskdhere/chatgpt:3.2.4
+```
+
+#### **🐳 Using Docker Compose:**
+
+```bash
+docker compose build
+```
+```bash
+docker compose up -d
 ```
 
 #### **🟢 Without Docker:**
