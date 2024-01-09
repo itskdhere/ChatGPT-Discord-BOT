@@ -1,0 +1,13 @@
+---
+version: "3.5"
+services:
+  chatgpt:
+    build: .
+    container_name: chatgpt
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./firebaseServiceAccountKey.json:/app/firebaseServiceAccountKey.json
+    ports:
+      - 7860:7860
