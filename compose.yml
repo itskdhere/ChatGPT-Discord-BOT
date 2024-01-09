@@ -1,20 +1,13 @@
 ---
-# sudo docker run -d -p 7860:7860 --name cl4t-tp cl4p-tp/chatgpt:3.2.4
 version: "3.5"
 services:
-  cl4p-tp:
+  chatgpt:
     build: .
-    container_name: cl4p-tp
+    container_name: chatgpt
     restart: unless-stopped
     env_file:
       - .env
     volumes:
       - ./firebaseServiceAccountKey.json:/app/firebaseServiceAccountKey.json
     ports:
-      - 7860:7860 
-    networks:
-      - proxy
-
-networks:
-  proxy:
-    external: true
+      - 7860:7860
